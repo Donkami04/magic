@@ -68,26 +68,26 @@ class ProductService {
       const response = await Product.update(changes, {
         where: { product_id: product_id, user_id: user_id },
       });
-      
+
       // Si no se actualizó ningún registro, verificamos el motivo
       if (response[0] === 0) {
         const product = await Product.findOne({
           where: { product_id: product_id },
         });
-  
+
         if (product) {
           return {
             statusCode: 403,
             message: "You are not authorized to modify this product",
           };
         }
-  
+
         return {
           statusCode: 404,
           message: "The product does not exist",
         };
       }
-  
+
       return {
         statusCode: 200,
         message: "The product has been successfully edited",
@@ -97,7 +97,6 @@ class ProductService {
       throw new Error("Error editing product");
     }
   }
-  
 
   async deleteProduct(product_id, user_id) {
     try {
@@ -105,26 +104,26 @@ class ProductService {
       const response = await Product.destroy({
         where: { product_id: product_id, user_id: user_id },
       });
-  
+
       // Si no se eliminó ningún registro, verificamos el motivo
       if (response === 0) {
         const product = await Product.findOne({
           where: { product_id: product_id },
         });
-  
+
         if (product) {
           return {
             statusCode: 403,
             message: "You are not authorized to delete this product",
           };
         }
-  
+
         return {
           statusCode: 404,
           message: "The product does not exist",
         };
       }
-  
+
       return {
         statusCode: 200,
         message: "The product has been deleted successfully",

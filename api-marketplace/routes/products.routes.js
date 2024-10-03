@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { productSchema, editProductSchema } = require("../schemas/product.schema");
+const {
+  productSchema,
+  editProductSchema,
+} = require("../schemas/product.schema");
 const { validateData } = require("../middlewares/validator.handler");
 const { checkRoles } = require("../middlewares/auth.handler");
 const passport = require("passport");
@@ -77,12 +80,11 @@ router.put(
   validateData(productSchema),
   async (req, res, next) => {
     try {
-      
       const product_id = req.params.id;
       const user_id = req.user.user_id;
       const changes = req.body;
       const data = await Product.editOneProduct(product_id, changes, user_id);
-      console.log(data);
+
       res.status(data.statusCode).json({
         statusCode: data.statusCode,
         message: data.message,
