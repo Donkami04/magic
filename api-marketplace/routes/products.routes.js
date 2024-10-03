@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { productSchema } = require("../schemas/product.schema");
+const { productSchema, editProductSchema } = require("../schemas/product.schema");
 const { validateData } = require("../middlewares/validator.handler");
 const { checkRoles } = require("../middlewares/auth.handler");
 const passport = require("passport");
@@ -31,12 +31,12 @@ router.post(
   async (req, res, next) => {
     try {
       const { user_id } = req.user;
-      const newProduct = await Product.getProductsBySeller(user_id);
-      res.status(newProduct.statusCode).json({
-        statusCode: newProduct.statusCode,
-        message: newProduct.message,
-        error: newProduct.error,
-        data: newProduct.data,
+      const data = await Product.getProductsBySeller(user_id);
+      res.status(data.statusCode).json({
+        statusCode: data.statusCode,
+        message: data.message,
+        error: data.error,
+        data: data.data,
       });
     } catch (error) {
       console.error(error);
@@ -77,11 +77,14 @@ router.put(
   validateData(productSchema),
   async (req, res, next) => {
     try {
-      const id = req.params.id;
+      
+      const product_id = req.params.id;
+      const user_id = req.user.user_id;
       const changes = req.body;
-      const data = await Product.editOneProduct(id, changes);
-      res.status(data.status).json({
-        status: data.status,
+      const data = await Product.editOneProduct(product_id, changes, user_id);
+      console.log(data);
+      res.status(data.statusCode).json({
+        statusCode: data.statusCode,
         message: data.message,
         error: data.error,
         data: data.data,
@@ -93,24 +96,26 @@ router.put(
   }
 );
 
-// router.delete(
-//   "/remove/:id",
-//   passport.authenticate("jwt", { session: false }),
-//   async (req, res, next) => {
-//     try {
-//       const id = req.params.id;
-//       const userDeleted = await deleteProduct(id);
-//       res.status(userDeleted.status).json({
-//         status: userDeleted.status,
-//         message: userDeleted.message,
-//         error: userDeleted.error,
-//         data: userDeleted.data,
-//       });
-//     } catch (error) {
-//       console.error(error);
-//       next(error);
-//     }
-//   }
-// );
+router.delete(
+  "/delete/:id",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles("vendedor"),
+  async (req, res, next) => {
+    try {
+      const product_id = req.params.id;
+      const user_id = req.user.user_id;
+      const data = await Product.deleteProduct(product_id, user_id);
+      res.status(data.statusCode).json({
+        statusCode: data.statusCode,
+        message: data.message,
+        error: data.error,
+        data: data.data,
+      });
+    } catch (error) {
+      console.error(error);
+      next(error);
+    }
+  }
+);
 
 module.exports = router;

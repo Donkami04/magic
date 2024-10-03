@@ -3,7 +3,6 @@ const boom = require("@hapi/boom");
 function checkRoles(...roles) {
   return (req, res, next) => {
     const user = req.user;
-    console.log(user);
     // Verificar si el usuario es undefined o null
     if (!user) {
       return next(boom.unauthorized("Usuario no autenticado"));
