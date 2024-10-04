@@ -34,81 +34,93 @@ export const Navbar = () => {
   }, [menuRef, buttonRef]);
 
   return (
-    <nav
-      className="flex justify-between items-center bg-black p-2 text-white"
-      aria-label="Main Navigation"
-    >
-      <h1 className="text-2xl font-bold">
-        <NavLink to="/" className="hover:text-cyan-400">
-          <span className="text-cyan-400">Market</span>
-          <span className="text-zinc-300">Place</span>
-        </NavLink>
-      </h1>
-
-      {/* Botón de menú hamburguesa */}
-      <div className="flex w-16 justify-between">
-        <div className="">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="size-6"
-          >
-            <path
-              fillRule="evenodd"
-              d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12A1.875 1.875 0 0 0 4.25 22.5h15.5a1.875 1.875 0 0 0 1.865-2.071l-1.263-12a1.875 1.875 0 0 0-1.865-1.679H16.5V6a4.5 4.5 0 1 0-9 0ZM12 3a3 3 0 0 0-3 3v.75h6V6a3 3 0 0 0-3-3Zm-3 8.25a3 3 0 1 0 6 0v-.75a.75.75 0 0 1 1.5 0v.75a4.5 4.5 0 1 1-9 0v-.75a.75.75 0 0 1 1.5 0v.75Z"
-              clipRule="evenodd"
-            />
-          </svg>
-          <p className="grid place-content-center text-sm absolute top-6 bg-red-500 rounded-full size-4">
-            {context.countItems}
-          </p>
-        </div>
-        <button
-          ref={buttonRef}
-          className="md:hidden flex items-center"
-          onClick={toggleMenu}
-          aria-label="Toggle Menu"
-        >
-          <img
-            className="fill-current text-cyan-500 w-6 h-6"
-            src="/slide-menu.svg"
-          />
-        </button>
-      </div>
-
-      {/* Menú desplegable */}
-      <aside
-        ref={menuRef}
-        className={`${
-          isMenuOpen ? "-translate-x-0" : "translate-x-full z-50"
-        } h-[calc(100vh-20px)] transition-transform duration-500 transform absolute top-12 w-[50%] right-0 bg-black md:flex md:items-center md:gap-4 md:static md:bg-transparent text-right`}
+    <>
+      <nav
+        className="h-20 flex justify-between items-center bg-black p-2 pr-2 text-white fixed top-0 left-0 w-full z-10 "
+        aria-label="Main Navigation"
       >
-        <div className="pt-[20px] flex flex-col gap-4 h-[30%] bg-red">
-          <NavLink
-            to="/"
-            className="flex justify-evenly hover:text-cyan-400"
-            end
-          >
-            <img className="fill-current w-6 h-6" src="/home.svg" />
-            <span className="grid place-items-center w-[40%]">Home</span>
+        <h1 className="font-bold max-sm:text-2xl sm:text-3xl md:text-4xl lg:text-5xl ">
+          <NavLink to="/">
+            <span className="blue-magiclog">Market</span>
+            <span className="text-zinc-300">Place</span>
+          </NavLink>
+        </h1>
+
+        {/* Botón de menú hamburguesa */}
+        <div className="flex w-80 justify-between items-center max-md:w-80 max-md:justify-around max-sm:w-28">
+          <NavLink to="/" className="hover:text-cyan-400 max-sm:hidden">
+            Home
           </NavLink>
           <NavLink
-            to="/login"
-            className="flex justify-evenly relative hover:text-cyan-400"
+            to="/registrarse"
+            className="hover:text-cyan-400 max-sm:hidden"
           >
-            <img className="fill-current w-6 h-6" src="/login.svg" />
-            <span className="grid place-items-center w-[40%]">Login</span>
+            Registrarse
           </NavLink>
-          <NavLink
-            to="/register"
-            className="flex justify-evenly relative hover:text-cyan-400"
+          <NavLink to="/login" className="hover:text-cyan-400 max-sm:hidden">
+            Login
+          </NavLink>
+          <div>
+            <figure>
+              <img src="/bag.svg" alt="" className="w-10 h-10" />
+            </figure>
+            <p className="grid place-content-center text-sm absolute top-6 bg-red-500 rounded-full size-4">
+              {context.countItems}
+            </p>
+          </div>
+          <button
+            ref={buttonRef}
+            className="sm:hidden flex items-center"
+            onClick={toggleMenu}
+            aria-label="Toggle Menu"
           >
-            <img className="fill-current w-6 h-6" src="/register.svg" />
-            <span className="grid place-items-center w-[40%]">Register</span>
-          </NavLink>
+            <img
+              className="fill-current text-cyan-500 w-10 h-10"
+              src="/slide-menu.svg"
+            />
+          </button>
         </div>
-      </aside>
-    </nav>
+
+        {/* Menú desplegable */}
+        {isMenuOpen && (
+          <aside
+            ref={menuRef}
+            className={`fixed top-20 right-0 h-screen w-56 bg-black transform transition-transform duration-300 ease-in-out ${
+              isMenuOpen ? "translate-x-0" : "translate-x-full"
+            } sm:hidden`}
+          >
+            <div className="pt-[20px] flex flex-col gap-4 h-[30%]">
+              <NavLink
+                onClick={toggleMenu}
+                to="/"
+                className="flex justify-evenly hover:text-cyan-400"
+                end
+              >
+                <img className="fill-current w-6 h-6" src="/home.svg" />
+                <span className="grid place-items-center w-[40%]">Home</span>
+              </NavLink>
+              <NavLink
+                onClick={toggleMenu}
+                to="/registrarse"
+                className="flex justify-evenly relative hover:text-cyan-400"
+              >
+                <img className="fill-current w-6 h-6" src="/login.svg" />
+                <span className="grid place-items-center w-[40%]">
+                  Registrarse
+                </span>
+              </NavLink>
+              <NavLink
+                onClick={toggleMenu}
+                to="/login"
+                className="flex justify-evenly relative hover:text-cyan-400"
+              >
+                <img className="fill-current w-6 h-6" src="/register.svg" />
+                <span className="grid place-items-center w-[40%]">Login</span>
+              </NavLink>
+            </div>
+          </aside>
+        )}
+      </nav>
+    </>
   );
 };

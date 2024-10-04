@@ -150,7 +150,7 @@ export const Products = () => {
 
   // Main component render
   return (
-    <main className="overflow-auto mt-20 w-full flex max-sm:flex-col sm:items-start justify-center pl-[10%] pr-[10%] bg-radial-custom max-sm:p-0">
+    <main className="h-heighWithOutNav overflow-auto mt-20 w-full flex max-sm:flex-col sm:items-start justify-center pl-[10%] pr-[10%] bg-radial-custom max-sm:p-0">
       <aside className="sticky top-0 text-white w-72 flex flex-col bg-transparent max-sm:hidden">
         <div className="flex flex-col h-[50%] items-center justify-between mt-4 ">
           {/* Name filter input */}
@@ -214,7 +214,7 @@ export const Products = () => {
           ref={filtersRef}
           className="sm:hidden max-sm:flex max-sm:flex-col max-sm:items-center max-sm:w-full bg-black border-t border-b border-white"
         > */}
-        {showFiltersMobile && (
+        {showFiltersMobile ? (
           <div
             ref={filtersRef}
             className="pt-2 absolute bg-black w-full flex flex-col items-center border-b border-white"
@@ -268,17 +268,17 @@ export const Products = () => {
               />
             </div>
           </div>
-        )}
-        <div className="flex text-white w-full justify-center h-10 bg-black">
-          <div
-            className="cursor-pointer flex justify-evenly items-center h-full w-56"
-            onClick={toggleMenuMobile}
-          >
-            <img className="w-6 h-6" src="/glass.svg" alt="Abrir filtros" />
-            <p>Filtrar productos</p>
+        ) : (
+          <div className="flex text-white w-full justify-center h-10 bg-black">
+            <div
+              className="cursor-pointer flex justify-evenly items-center h-full w-56"
+              onClick={toggleMenuMobile}
+            >
+              <img className="w-6 h-6" src="/glass.svg" alt="Abrir filtros" />
+              <p>Filtrar productos</p>
+            </div>
           </div>
-        </div>
-
+        )}
         {/* </div> */}
       </div>
       {/* Product list or "No products found" message */}
@@ -291,9 +291,9 @@ export const Products = () => {
             </div>
           ))
         ) : (
-          <div className="w-full  h-screen grid place-content-center text-5xl text-red-500 text-center">
+          <main className="max-sm:h-full w-full grid place-content-center text-5xl text-red-500 text-center">
             <p>No se encontraron productos</p>
-          </div>
+          </main>
         )}
       </div>
     </main>

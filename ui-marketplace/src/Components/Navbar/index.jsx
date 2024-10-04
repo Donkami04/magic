@@ -121,7 +121,7 @@ export const Navbar = () => {
           </aside>
         )}
       </nav>
-      <hr />
+      {/* <div className="border border-white w-72"></div> */}
     </>
   );
 };

@@ -5,24 +5,31 @@ import { ShoppingCartContext } from "../../Context";
 export const Card = (product) => {
   const context = useContext(ShoppingCartContext);
   return (
-    <div className="flex align-middle m-auto mb-5 bg-zinc-800 cursor-pointer w-[90%] h-28 rounded-lg">
-      <figure className="w-40 m-auto">
-        <img src="/gift.png" alt="" />
-      </figure>
-      <section className="w-[100%] flex text-center flex-col ml-4 justify-around">
-        <h3 className="text-cyan-400 text-lg font-extrabold">
-          {product.product.name}
+    <div className="flex flex-col m-auto items-center w-full rounded-lg pt-5 bg-zinc-950 max-sm:w-full">
+      <img
+        src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"
+        alt=""
+        className="w-48 h-48 rounded-lg"
+      />
+
+      <section className="w-full flex flex-col justify-evenly max-sm:justify-center h-full items-center ">
+        <h3 className="h-full text-cyan-500 text-lg font-extrabold">
+          {product.product.name.toUpperCase()}
         </h3>
-        <p className="text-white">{product.product.price}</p>
-        <p className="text-white">{product.product.sku}</p>
-        <button className="bg-cyan-400 rounded-lg w-[50%] h-7 m-auto">
-          <img
-            title="Agregar al carrito"
-            className="w-6 h-6 m-auto"
-            src="/add-shoping.svg"
-            alt="Agregar al carrito"
-          />
-        </button>
+        <div className="flex w-full justify-between items-center pl-4 pr-4">
+          <div className="flex flex-col">
+            <p className="text-white">{product.product.price}</p>
+            <p className="text-white">{product.product.sku}</p>
+          </div>
+          <button className="bg-cyan-600 rounded-full w-10 h-10 ">
+            <img
+              title="Agregar al carrito"
+              className="w-6 h-6 m-auto"
+              src="/add-shoping.svg"
+              alt="Agregar al carrito"
+            />
+          </button>
+        </div>
       </section>
     </div>
   );

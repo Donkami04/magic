@@ -5,67 +5,101 @@ import { Card } from "../../Components/Card";
 import { Loading } from "../../Components/Loading";
 import { Layout } from "../../Components/Layout";
 import { ErrorOverlay } from "../../Components/ErrorOverlay";
+import { Products } from "../../Components/Products";
 
 export const Home = () => {
-  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const context = useContext(ShoppingCartContext);
   const [showError, setShowError] = useState(true);
+  const [filteredObjects, setFilteredObjects] = useState([]);
+  const context = useContext(ShoppingCartContext);
 
-  const hideError = () => {
-    setError(null);
-    setShowError(false);
+  const products = context.products;
+
+  const handleFilterName = (event) => {
+    const result = products.filter((product) =>
+      product.name.includes(event.target.value)
+    );
+    setFilteredObjects(result);
   };
 
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const { data } = await getProducts();
-      setProducts(data);
-    } catch (error) {
-      setError("Error al obtener la lista de productos desde el servidor");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const hideError = () => {
+  //   setError(null);
+  //   setShowError(false);
+  // };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // if (loading) {
+  //   return (
+  //     <div>
+  //       <Loading />
+  //     </div>
+  //   );
+  // }
 
-  if (loading) {
-    return (
-      <div>
-        <Loading />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <ErrorOverlay
-        message="Ha ocurrido un error del servidor."
-        onClose={hideError}
-      />
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <ErrorOverlay
+  //       message="Ha ocurrido un error del servidor."
+  //       onClose={hideError}
+  //     />
+  //   );
+  // }
 
   return (
-    <div>
-      <main className="flex items-center justify-center pl-[10%] pr-[10%]  bg-radial-custom max-sm:p-0 mt-20">
-        <aside className="text-white w-72 flex flex-col items-center justify-around max-sm:hidden ">
-          <div>Filtrar por precio</div>
-          <div>Filtrar por precio</div>
-          <div>Filtrar por precio</div>
-        </aside>
-        <div className=" grid grid-cols-3 gap-4 max-sm:flex max-sm:flex-col max-sm:gap-4 max-sm:ml-4 max-sm:mr-4">
-          {products.map((product) => (
-            <Card key={product.product_id} product={product} />
-          ))}
+    <Products>
+      <div className="flex flex-col h-[50%] items-center justify-between mt-4 ">
+        <div className="mb-4">
+          <input
+            type="email"
+            id="email"
+            placeholder="Ej. Bolso"
+            // value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 "
+          />
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-white"
+          >
+            Buscar por nombre
+          </label>
         </div>
-      </main>
-    </div>
+        <div className="mb-4">
+          <input
+            type="email"
+            id="email"
+            placeholder="Ej. Bolso"
+            // value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 "
+          />
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-white"
+          >
+            Buscar por SKU
+          </label>
+        </div>
+        <div className="mb-4">
+          <input
+            type="email"
+            id="email"
+            placeholder="Ej. Bolso"
+            // value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 "
+          />
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-white"
+          >
+            Filtrar por precio
+          </label>
+        </div>
+      </div>
+    </Products>
   );
 };

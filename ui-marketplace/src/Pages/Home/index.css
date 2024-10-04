@@ -1,7 +1,0 @@
-.custom-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Ajusta el número de columnas según sea necesario */
-    min-height: 200px; /* Establece una altura mínima para el grid */
-    max-height: 200px; /* Limita la altura máxima del grid */
-    overflow-y: auto;
-}

@@ -12,9 +12,10 @@ const productSchema = Joi.object({
     "number.min": "La cantidad del producto debe ser al menos 1",
     "number.integer": "La cantidad del producto debe ser un número entero",
   }),
-  price: Joi.number().integer().positive().required().messages({
+  price: Joi.number().integer().positive().max(999999).required().messages({
     "any.required": "El precio del producto es requerido",
-    "number.positive": "El precio del producto debe ser un número positivo"
+    "number.positive": "El precio del producto debe ser un número positivo",
+    "number.max": "El precio del producto no puede exceder 999999"
   }),
 });
 
@@ -36,9 +37,10 @@ const editProductSchema = Joi.object({
     "number.min": "La cantidad del producto debe ser al menos 1",
     "number.integer": "La cantidad del producto debe ser un número entero",
   }),
-  price: Joi.number().integer().positive().required().messages({
+  price: Joi.number().integer().positive().max(999999).required().messages({
     "any.required": "El precio del producto es requerido",
-    "number.positive": "El precio del producto debe ser un número positivo"
+    "number.positive": "El precio del producto debe ser un número positivo",
+    "number.max": "El precio del producto no puede exceder 999999"
   }),
 });
 

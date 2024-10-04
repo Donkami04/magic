@@ -2,14 +2,12 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{js,jsx,html}"],
   theme: {
     extend: {
-      // gridTemplateColumns: {
-      //   // Simple 16 column grid
-      //   auto: "repeat(auto-fill, minmax(250px, 1fr))",
-      //   row: "grid-auto-rows: minmax(200px, 250px);"
-      // },
+      width: {
+        '128': '32rem', // Añadir un nuevo valor, por ejemplo, w-128 (equivalente a 512px)
+      },
       height: {
         // Define un custom height que puedes usar en tus componentes
-        heighWithOutNav: "calc(100vh - 5rem - 1px)",
+        heighWithOutNav: "calc(100vh -15rem 1px)",
       },
       keyframes: {
         glow: {

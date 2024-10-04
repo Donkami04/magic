@@ -65,7 +65,7 @@ export const NewProduct = () => {
       </div>
       <div className="mb-6">
         <label htmlFor="price" className="block text-sm font-medium text-white">
-          Cantidad
+          Precio
         </label>
         <input
           type="number"
