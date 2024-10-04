@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useState, useRef, useEffect, useContext } from "react";
-import { ShoppingCartContext } from "../../Context";
+import { ShoppingCartContext } from "../../Context/ShoppingCart";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

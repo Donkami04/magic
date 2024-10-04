@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState, useRef } from "react";
-import { ShoppingCartContext } from "../../Context";
+import { ShoppingCartContext } from "../../Context/ShoppingCart";
 import { getProducts } from "../../Services/Api/products";
 import { Card } from "../../Components/Card";
 import { Loading } from "../../Components/Loading";
@@ -291,7 +291,7 @@ export const Products = () => {
             </div>
           ))
         ) : (
-          <div className="w-full  h-screen grid place-content-center text-5xl text-red-500 text-center">
+          <div className="w-full max-sm:h-[calc(100vh-7.5rem)] sm:h-[calc(100vh-5rem)] text-5xl text-red-500 text-center">
             <p>No se encontraron productos</p>
           </div>
         )}

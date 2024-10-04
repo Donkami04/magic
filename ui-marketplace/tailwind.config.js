@@ -7,7 +7,7 @@ module.exports = {
       },
       height: {
         // Define un custom height que puedes usar en tus componentes
-        heighWithOutNav: "calc(100vh -15rem 1px)",
+        heighWithOutNav: "calc(100vh - 5rem)",
       },
       keyframes: {
         glow: {
