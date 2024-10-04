@@ -2,13 +2,18 @@ import { useRoutes, BrowserRouter } from "react-router-dom";
 import { ShoppingCartProvider } from "../../Context";
 import { Navbar } from "../../Components/Navbar";
 import { Home } from "../Home";
+import { Login } from "../Login";
+import { Register } from "../Register";
+import { NewProduct } from "../NewProduct";
 
 import "./App.css";
 
 const AppRoutes = () => {
   let routes = useRoutes([
     { path: "/", element: <Home /> },
-    // { path: "/*", element: <NotFound /> },
+    { path: "/login", element: <Login /> },
+    { path: "/registrarse", element: <Register /> },
+    { path: "/registrar/producto", element: <NewProduct /> },
   ]);
 
   return routes;

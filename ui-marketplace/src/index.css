@@ -2,6 +2,28 @@
 @tailwind components;
 @tailwind utilities;
 
-/* h1 {
-    justify-content: ;
+/* * {
+    overflow-x: hidden;
 } */
+
+@layer utilities {
+  .bg-radial-custom {
+    background-image: linear-gradient(
+      90deg,
+      rgba(0, 32, 37, 1) 0%,
+      rgba(0, 3, 4, 1) 2%,
+      rgba(0, 0, 0, 1) 50%,
+      rgba(0, 3, 4, 1) 98%,
+      rgba(0, 32, 37, 1) 100%
+    );
+  }
+  .blue-magiclog {
+    color: #13AFEF
+  }
+  .bg-blue-magiclog {
+    background-color: #13AFEF
+  }
+  .bg-darkblue-magiclog {
+    background-color: #13B2EE
+  }
+}

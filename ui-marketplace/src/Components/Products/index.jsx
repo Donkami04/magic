@@ -37,9 +37,9 @@ export const Home = () => {
 
   if (loading) {
     return (
-      <div>
+      <Layout>
         <Loading />
-      </div>
+      </Layout>
     );
   }
 
@@ -53,19 +53,12 @@ export const Home = () => {
   }
 
   return (
-    <div>
-      <main className="flex items-center justify-center pl-[10%] pr-[10%]  bg-radial-custom max-sm:p-0 mt-20">
-        <aside className="text-white w-72 flex flex-col items-center justify-around max-sm:hidden ">
-          <div>Filtrar por precio</div>
-          <div>Filtrar por precio</div>
-          <div>Filtrar por precio</div>
-        </aside>
-        <div className=" grid grid-cols-3 gap-4 max-sm:flex max-sm:flex-col max-sm:gap-4 max-sm:ml-4 max-sm:mr-4">
-          {products.map((product) => (
-            <Card key={product.product_id} product={product} />
-          ))}
-        </div>
-      </main>
-    </div>
+    <Layout>
+      <div className="h-screen w-full bg-black grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {products.map((product) => (
+          <Card key={product.product_id} product={product} />
+        ))}
+      </div>
+    </Layout>
   );
 };
