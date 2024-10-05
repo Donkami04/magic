@@ -5,7 +5,6 @@ import axios from "axios";
 export const BASE_API_URL = `http://localhost:3000/api/v1/marketplace`;
 
 export const getProducts = async (name = '', price = '', sku = '') => {
-  console.log(name);
   // Crear un array para almacenar los parámetros de consulta
   const queryParams = [];
 
@@ -16,7 +15,6 @@ export const getProducts = async (name = '', price = '', sku = '') => {
 
   // Unir los parámetros con '&' para formar la cadena de consulta
   const queryString = queryParams.length ? `?${queryParams.join('&')}` : '';
-  console.log(queryString);
   return axios
     .get(`${BASE_API_URL}/products/filter${queryString}`)
     .then((response) => response.data)

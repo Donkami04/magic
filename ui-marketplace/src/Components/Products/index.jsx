@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState, useRef } from "react";
 import { ShoppingCartContext } from "../../Context/ShoppingCart";
-import { getProducts } from "../../Services/Api/products";
+import { getProducts } from "../../Services/Api/Products/products";
 import { Card } from "../../Components/Card";
 import { Loading } from "../../Components/Loading";
 import { ErrorOverlay } from "../../Components/ErrorOverlay";

@@ -1,28 +1,79 @@
+import { useNavigate } from "react-router-dom"; // Asegúrate de tener el hook de navegación si lo necesitas
 import React, { createContext, useState, useContext, useEffect } from "react";
+import axios from "axios";
 
-const AuthContext = createContext(null);
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // Estado de carga
 
   useEffect(() => {
-    // Verificar si hay un token almacenado al cargar la aplicación
-    const token = localStorage.getItem("token");
-    if (token) {
-      // Aquí podrías decodificar el token o hacer una llamada a la API
-      // para obtener la información del usuario
-      setUser({ token });
-    }
+    const fetchUser = async () => {
+      const token = localStorage.getItem("jwtToken");
+      if (token) {
+        try {
+          const response = await axios.get(
+            "http://localhost:3000/api/v1/marketplace/auth/decode/jwt",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          console.log(response);
+          if (response.statusCode === 200) {
+            setUser({ token, ...response.data });
+            console.log(`Desde el aut ${response.data}`);
+          } else {
+            // localStorage.removeItem("jwtToken");
+            setUser(null);
+          }
+        } catch (error) {
+          console.error("Error al obtener el usuario:", error);
+          // Aquí puedes manejar el error si es necesario
+        }
+      }
+      setLoading(false); // Cambiar estado de carga a false al final
+    };
+
+    fetchUser();
   }, []);
 
-  const login = async (credentials) => {
-    console.log(credentials);
-    // Aquí iría la lógica para hacer la petición de login a tu API
-    // Por ahora, simularemos una respuesta exitosa
-    const response = { token: "fake_jwt_token" };
+  const login = async (email, password) => {
+    try {
+      if (!email || !password) {
+        return {
+          statusCode: 400,
+          message: "El Email y el password son requeridos",
+        };
+      }
+      if (password.length < 8) {
+        return {
+          statusCode: 400,
+          message: "El password debe tener al menos 8 caracteres",
+        };
+      }
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/marketplace/auth/login",
+        { email, password }
+      );
 
-    localStorage.setItem("jwtToken", response.token);
-    setUser({ token: response.token });
+      const statusCode = response?.status;
+      if (statusCode === 200) {
+        const token = response.data.data.token;
+        localStorage.setItem("jwtToken", token);
+        setUser({ token, ...response.data.userData });
+        return { statusCode };
+      } else {
+        const message = response.data.message;
+        return { statusCode, message };
+      }
+    } catch (error) {
+      const statusCode = error.response?.status || 500; // Manejar error sin status
+      const message = error.response?.data.message || "Error en el servidor.";
+      return { statusCode, message };
+    }
   };
 
   const logout = () => {
@@ -30,21 +81,21 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  const value = {
-    user,
-    login,
-    logout,
-  };
-
   return (
-    <AuthContext.Provider value={{ value }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading, // Proporcionar el estado de carga
+        login,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 };
 
+// Hook personalizado para usar el contexto de autenticación
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth debe ser usado dentro de un AuthProvider");
-  }
-  return context;
+  return useContext(AuthContext);
 };

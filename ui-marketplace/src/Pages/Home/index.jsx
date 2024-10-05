@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState, useRef } from "react";
 import { ShoppingCartContext } from "../../Context/ShoppingCart";
-import { getProducts } from "../../Services/Api/products";
+import { getProducts } from "../../Services/Api/Products/products";
 import { Card } from "../../Components/Card";
 import { Loading } from "../../Components/Loading";
 import { ErrorOverlay } from "../../Components/ErrorOverlay";
@@ -92,7 +92,6 @@ export const Home = () => {
         price: maxPrice,
         sku: searchSkuValue,
       };
-      // console.log(data);
       const response = await getProducts(data.name, data.price, data.sku);
       const statusCode = response?.statusCode || 500;
       if (statusCode !== 200) {
@@ -117,8 +116,6 @@ export const Home = () => {
     setMaxPrice("");
     setMaxPriceFormatted("");
     setFilteredProducts(products);
-    console.log(filteredProducts);
-    // handleSubmit();
   };
 
   useEffect(() => {}, [filteredProducts]);
@@ -184,10 +181,10 @@ export const Home = () => {
               >
                 <BsFillSearchHeartFill size="1.8rem" color="#0ea5e9" />
               </button>
-              <button className=" grid place-content-center bg-white w-24 h-10 rounded-2xl m-auto hover:bg-zinc-400">
+              <button className=" grid place-content-center bg-sky-500 w-24 h-10 rounded-2xl m-auto hover:bg-zinc-400">
                 <GiBroom
                   size="1.8rem"
-                  color="red"
+                  color="white"
                   onClick={(e) => clearFilters(e)}
                 />
               </button>
@@ -259,10 +256,10 @@ export const Home = () => {
                   >
                     <BsFillSearchHeartFill size="1.8rem" color="#0ea5e9" />
                   </button>
-                  <button className=" grid place-content-center bg-white w-24 h-10 rounded-2xl m-auto hover:bg-zinc-400">
+                  <button className=" grid place-content-center bg-sky-500 w-24 h-10 rounded-2xl m-auto hover:bg-zinc-400">
                     <GiBroom
                       size="1.8rem"
-                      color="red"
+                      color="white"
                       onClick={(e) => clearFilters(e)}
                     />
                   </button>
