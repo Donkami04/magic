@@ -30,7 +30,7 @@ async function loginUser(email, password) {
   }
 }
 
-function signToken(user) {
+const signToken = (user) => {
   try {
     const payload = {
       rol: user.rol,
@@ -46,5 +46,18 @@ function signToken(user) {
     console.error(error);
   }
 }
+
+
+// Este es tu controlador para decodificar el JWT
+// const decodeTokenController = (token) => {
+//   const token = req.header('Authorization'); // Suponiendo que el token viene en el header Authorization
+//   const secret = process.env.JWT_SECRET;    // Almacena el secreto en las variables de entorno
+
+//   if (!token) {
+//     return res.status(401).json({ message: 'Token no provisto' });
+//   }
+
+// };
+
 
 module.exports = { loginUser, signToken };

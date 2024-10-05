@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { loginSchema } = require("../schemas/auth.schema")
+const { loginSchema } = require("../schemas/auth.schema");
 const { validateData } = require("../middlewares/validator.handler");
 const passport = require("passport");
 const { signToken } = require("../services/auth.service");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 // const SECRET = process.env.JWT_SECRET;
 
@@ -32,11 +32,33 @@ router.post(
           error: user.error,
           data: {
             user: user.data,
-            token: tokenData.token // Agrega el token generado
-          }
+            token: tokenData.token, // Agrega el token generado
+          },
         });
       }
     } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// Obtener informacion del JWT
+router.get(
+  "/decode/jwt",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res, next) => {
+    try {
+      const { user_id, rol } = req.user;
+      const data = {
+        user_id,
+        rol,
+      }
+      res.status(200).json({
+        statusCode: 200,
+        data: data,
+      });
+    } catch (error) {
+      console.error(error);
       next(error);
     }
   }

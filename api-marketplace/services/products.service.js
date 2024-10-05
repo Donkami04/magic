@@ -19,7 +19,6 @@ class ProductService {
   // Controlador para obtener productos filtrados por nombre, SKU y/o precio
   async getFilteredProducts(name, sku, price) {
     try {
-      console.log(name, sku, price);
       price = Number(price)
       const conditions = {};
       if (name) {
@@ -35,7 +34,6 @@ class ProductService {
       }
 
       if (price) {
-        console.log("AAA");
         conditions.price = {
           [Op.lte]: price,
         };
@@ -54,70 +52,6 @@ class ProductService {
       throw new Error("Error getting products information");
     }
   }
-
-  // async getProductsByName(name) {
-  //   try {
-  //     const data = await Product.findAll({
-  //       where: {
-  //         name: {
-  //           [Op.like]: `%${name}%`,
-  //         },
-  //       },
-  //     });
-  //     return {
-  //       statusCode: 200,
-  //       message: "roductos filtrados por nombre obtenidos exitosamente",
-  //       data: data,
-  //     };
-  //   } catch (error) {
-  //     console.error(error);
-  //     throw new Error("Error obteniendo productos filtrados por nombre");
-  //   }
-  // }
-
-  // async getProductsBySku(sku) {
-  //   try {
-  //     const data = await Product.findAll({
-  //       where: {
-  //         sku: {
-  //           [Op.like]: `%${sku}%`,
-  //         },
-  //       },
-  //     });
-  //     return {
-  //       statusCode: 200,
-  //       message: "Productos filtrados por SKU obtenidos exitosamente",
-  //       data: data,
-  //     };
-  //   } catch (error) {
-  //     console.error(error);
-  //     throw new Error("Error obteniendo productos filtrados por SKU");
-  //   }
-  // }
-
-  // async getProductsByPrice(maxPrice) {
-  //   try {
-  //     console.log(
-  //       "Searching for products with price less than or equal to:",
-  //       maxPrice
-  //     );
-  //     const data = await Product.findAll({
-  //       where: {
-  //         price: {
-  //           [Op.lte]: maxPrice, // Obtener productos donde el precio es menor o igual que maxPrice
-  //         },
-  //       },
-  //     });
-  //     return {
-  //       statusCode: 200,
-  //       message: "Productos filtrados obtenidos exitosamente por precio",
-  //       data: data,
-  //     };
-  //   } catch (error) {
-  //     console.error(error);
-  //     throw new Error("Error obteniendo productos filtrados por precio");
-  //   }
-  // }
 
   async createProduct(data, userData) {
     try {
@@ -140,20 +74,19 @@ class ProductService {
 
       return {
         statusCode: 201,
-        message: "Product created successfully.",
+        message: "Producto creado",
         data: newProduct,
       };
     } catch (error) {
       console.error(error);
-      throw new Error("Error creating product: " + error.message);
+      throw new Error("Error creando el producto: " + error.message);
     }
   }
 
   async getProductsBySeller(user_id) {
     try {
-      // Buscar productos asociados al usuario
       const products = await Product.findAll({
-        where: { user_id: user_id }, // Usar el user_id encontrado
+        where: { user_id: user_id },
       });
 
       return {
@@ -165,6 +98,7 @@ class ProductService {
       throw new Error("Error getting products information: " + error.message);
     }
   }
+
 
   async editOneProduct(product_id, changes, user_id) {
     try {

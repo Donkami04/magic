@@ -1,10 +1,14 @@
 const { User } = require("../db/models/users.model");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 class UserService {
   async getUsers() {
     try {
-      const data = await User.findAll();
+      const data = await User.findAll({
+        where: {
+          rol: "vendedor",
+        },
+      });
       return {
         statusCode: 200,
         message: "User information successfully obtained",
@@ -29,7 +33,7 @@ class UserService {
           name: data.name,
           email: data.email,
           password: hashedPassword,
-          rol: "vendedor"
+          rol: "vendedor",
         });
 
         return {
