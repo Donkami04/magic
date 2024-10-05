@@ -5,14 +5,14 @@ import { ShoppingCartContext } from "../../Context/ShoppingCart";
 export const Card = (product) => {
   const context = useContext(ShoppingCartContext);
   return (
-    <div className="flex mb-5 pl-5 pr-5 width-products text-white max-sm:w-[100%] ">
+    <div className="flex my-5 px-5 width-products text-white">
       <img
         src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"
         alt=""
         className="w-56 h-56 rounded-lg"
       />
 
-      <section className="w-full flex flex-col justify-evenly items-center max-sm:ml-5 ">
+      <section className="w-full flex flex-col justify-evenly items-center max-sm:ml-5 max-md:ml-3">
         <h3 className=" text-cyan-500 text-lg font-extrabold text-center">
           {product.product.name.toUpperCase()}
         </h3>
