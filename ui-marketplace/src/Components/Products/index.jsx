@@ -291,7 +291,7 @@ export const Products = () => {
             </div>
           ))
         ) : (
-          <div className="w-full max-sm:h-[calc(100vh-7.5rem)] sm:h-[calc(100vh-5rem)] text-5xl text-red-500 text-center">
+          <div className="text-5xl bg-red-500 text-center absolute">
             <p>No se encontraron productos</p>
           </div>
         )}

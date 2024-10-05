@@ -9,7 +9,7 @@ import { ErrorOverlay } from "../../Components/ErrorOverlay";
  * Products component for displaying and filtering a list of products.
  * @returns {JSX.Element} The rendered Products component
  */
-export const Products = () => {
+export const Home = () => {
   // State variables
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -150,9 +150,11 @@ export const Products = () => {
 
   // Main component render
   return (
-    <main className="overflow-auto mt-20 w-full flex max-sm:flex-col sm:items-start justify-center pl-[10%] pr-[10%] bg-radial-custom max-sm:p-0">
-      <aside className="sticky top-0 text-white w-72 flex flex-col bg-transparent max-sm:hidden">
-        <div className="flex flex-col h-[50%] items-center justify-between mt-4 ">
+    <main className="h-heighWithOutNav absolute top-20 overflow-auto grid w-full pl-[10%] pr-[10%] bg-radial-custom max-sm:p-0">
+      <div className=" ml-auto mr-auto flex max-sm:flex-col">
+        {/* Filtros pantallas grandes */}
+        <aside className="sticky top-0 text-white w-72 bg-transparent max-sm:hidden bg-red-600">
+          {/* <div className="flex flex-col h-[50%] items-center justify-between mt-4 "> */}
           {/* Name filter input */}
           <div className="mb-4">
             <input
@@ -164,12 +166,6 @@ export const Products = () => {
               required
               className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 "
             />
-            {/* <label
-              htmlFor="name"
-              className="block text-sm font-medium text-white"
-            >
-              Buscar por nombre
-            </label> */}
           </div>
           {/* SKU filter input */}
           <div className="mb-4">
@@ -182,12 +178,6 @@ export const Products = () => {
               required
               className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 "
             />
-            {/* <label
-              htmlFor="sku"
-              className="block text-sm font-medium text-white"
-            >
-              Buscar por SKU
-            </label> */}
           </div>
           {/* Price filter input */}
           <div className="mb-4">
@@ -200,101 +190,99 @@ export const Products = () => {
               required
               className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 "
             />
-            {/* <label
-              htmlFor="maxPrice"
-              className="block text-sm font-medium text-white"
-            >
-              Filtrar por precio
-            </label> */}
           </div>
-        </div>
-      </aside>
-      <div className="sm:hidden max-sm:flex max-sm:flex-col max-sm:items-center ">
-        {/* <div
+          {/* </div> */}
+        </aside>
+        {/* Filtro para mobile */}
+        <div className="bg-blue-600 sm:hidden max-sm:flex max-sm:flex-col max-sm:items-center ">
+          {/* <div
           ref={filtersRef}
           className="sm:hidden max-sm:flex max-sm:flex-col max-sm:items-center max-sm:w-full bg-black border-t border-b border-white"
         > */}
-        {showFiltersMobile && (
-          <div
-            ref={filtersRef}
-            className="pt-2 absolute bg-black w-full flex flex-col items-center border-b border-white"
-          >
-            {/* Name filter input */}
-            <div className="mb-4 w-56">
-              <input
-                type="text"
-                id="name"
-                placeholder="Buscar producto"
-                value={searchNameValue}
-                onChange={handleFilterName}
-                required
-                className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
-              />
-            </div>
-            {/* SKU filter input */}
-            <div className="mb-4 w-56">
-              {/* <label
+          {showFiltersMobile && (
+            <div
+              ref={filtersRef}
+              className="pt-2 bg-black w-full flex flex-col items-center border-b border-white "
+            >
+              {/* Name filter input */}
+              <div className="mb-4 w-56">
+                <input
+                  type="text"
+                  id="name"
+                  placeholder="Buscar producto"
+                  value={searchNameValue}
+                  onChange={handleFilterName}
+                  required
+                  className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                />
+              </div>
+              {/* SKU filter input */}
+              <div className="mb-4 w-56">
+                {/* <label
                   htmlFor="sku"
                   className="block text-sm font-medium text-white"
                 >
                   Buscar por SKU
                 </label> */}
-              <input
-                type="text"
-                id="sku"
-                placeholder="Filtrar por SKU"
-                value={searchSkuValue}
-                onChange={handleFilterSku}
-                required
-                className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
-              />
-            </div>
-            {/* Price filter input */}
-            <div className="mb-4 w-56">
-              {/* <label
+                <input
+                  type="text"
+                  id="sku"
+                  placeholder="Filtrar por SKU"
+                  value={searchSkuValue}
+                  onChange={handleFilterSku}
+                  required
+                  className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                />
+              </div>
+              {/* Price filter input */}
+              <div className="mb-4 w-56">
+                {/* <label
                   htmlFor="maxPrice"
                   className="block text-sm font-medium text-white"
                 >
                   Filtrar por precio
                 </label> */}
-              <input
-                type="text"
-                id="maxPrice"
-                placeholder="Precio maximo"
-                value={maxPriceFormatted}
-                onChange={handleFilterPrice}
-                required
-                className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
-              />
+                <input
+                  type="text"
+                  id="maxPrice"
+                  placeholder="Precio maximo"
+                  value={maxPriceFormatted}
+                  onChange={handleFilterPrice}
+                  required
+                  className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                />
+              </div>
+            </div>
+          )}
+          <div className="flex sticky text-white w-full justify-center h-10 bg-black">
+            <div
+              className="cursor-pointer flex justify-evenly items-center h-full w-56"
+              onClick={toggleMenuMobile}
+            >
+              <img className="w-6 h-6" src="/glass.svg" alt="Abrir filtros" />
+              <p>Filtrar productos</p>
             </div>
           </div>
-        )}
-        <div className="flex text-white w-full justify-center h-10 bg-black">
-          <div
-            className="cursor-pointer flex justify-evenly items-center h-full w-56"
-            onClick={toggleMenuMobile}
-          >
-            <img className="w-6 h-6" src="/glass.svg" alt="Abrir filtros" />
-            <p>Filtrar productos</p>
-          </div>
-        </div>
 
-        {/* </div> */}
-      </div>
-      {/* Product list or "No products found" message */}
-      <div className="flex flex-col lg:w-128 max-sm:h-full">
-        {filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => (
-            <div key={product.product_id}>
-              <Card product={product} />
-              <div className="border-b border-white"></div>
+          {/* </div> */}
+        </div>
+        {/* Product list or "No products found" message */}
+        <div className="flex flex-col w-128">
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => (
+              <div className="ml-20" key={product.product_id}>
+                <Card product={product} />
+                <div className="border-b border-white"></div>
+              </div>
+            ))
+          ) : (
+            <div className=" text-white font-bold border-b border-white h-40   pl-5 ml-20 pr-5 inset-0 flex items-center justify-center max-sm:relative">
+              <p className="h-92">
+                No se encontraron productos con los filtros dados 😭
+              </p>
             </div>
-          ))
-        ) : (
-          <div className="w-full max-sm:h-[calc(100vh-7.5rem)] sm:h-[calc(100vh-5rem)] text-5xl text-red-500 text-center">
-            <p>No se encontraron productos</p>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </main>
   );

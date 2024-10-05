@@ -34,18 +34,18 @@ class UserService {
 
         return {
           statusCode: 201,
-          message: "User created successfully.",
+          message: "Usuario creado, por favor inicie sesión",
           data: newUser.name,
         };
       }
 
       return {
         statusCode: 409,
-        message: "The user is already registered",
+        message: `El correo ${data.email} ya se encuentra registrado`,
       };
     } catch (error) {
       console.error(error);
-      throw new Error("Error creating user");
+      throw new Error("Error creando usuario");
     }
   }
 }

@@ -7,13 +7,13 @@ import { Home } from "../Home";
 import { Login } from "../Login";
 import { Register } from "../Register";
 import { NewProduct } from "../NewProduct";
-import { Products } from "../../Components/Products";
+// import { Products } from "../../Components/Products";
 
 import "./App.css";
 
 const AppRoutes = () => {
   let routes = useRoutes([
-    { path: "/", element: <Products /> },
+    { path: "/", element: <Home /> },
     { path: "/login", element: <Login /> },
     { path: "/registrarse", element: <Register /> },
     { path: "/registrar/producto", element: <NewProduct /> },

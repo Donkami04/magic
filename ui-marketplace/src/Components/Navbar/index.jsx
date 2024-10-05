@@ -6,11 +6,19 @@ export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null); // Referencia para el menú desplegable
   const buttonRef = useRef(null);
+  const [showSellerOptions, setShowSellerOptions] = useState(null);
   const context = useContext(ShoppingCartContext);
+  const token = localStorage.getItem("jwtToken");
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (token) {
+      setShowSellerOptions(true);
+    }
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event) => {

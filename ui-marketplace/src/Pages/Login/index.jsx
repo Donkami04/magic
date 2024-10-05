@@ -14,19 +14,22 @@ export const Login = () => {
     e.preventDefault();
     setError("");
     try {
-      await context.login(email, password);
-      // Redirige al usuario a la página principal después del login exitoso
-      navigate("/");
-    } catch (err) {
-      setError("Error del servidor.");
-      console.error("Error de login:", err);
+      const response = await context.login(email, password);
+
+      if (response.statusCode === 200) {
+        navigate("/");
+      } else {
+        setError(response.message);
+      }
+    } catch (error) {
+      console.error("Error de login:", error);
+      // setError(error.message);
     }
   };
 
   return (
-    <ContentForm title={"Iniciar Sesión"}>
-      {/* <form onSubmit={handleSubmit}> */}
-      {error && <p className="text-red-500 mb-4">{error}</p>}
+    <ContentForm title={"Iniciar Sesión"} handleSubmit={handleSubmit}>
+      {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
       <div className="mb-4">
         <label htmlFor="email" className="block text-sm font-medium text-white">
           Correo electrónico
@@ -36,7 +39,7 @@ export const Login = () => {
           id="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required
+          // required
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
         />
       </div>
@@ -52,7 +55,7 @@ export const Login = () => {
           id="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
+          // required
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
         />
       </div>
@@ -63,7 +66,6 @@ export const Login = () => {
       >
         Login
       </button>
-      {/* </form> */}
     </ContentForm>
   );
 };

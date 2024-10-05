@@ -12,6 +12,8 @@ router.post(
   "/login",
   // validateData(loginSchema),
   passport.authenticate("local", { session: false }),
+  validateData(loginSchema),
+
   async (req, res, next) => {
     try {
       const user = req.user;

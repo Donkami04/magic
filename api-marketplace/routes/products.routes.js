@@ -26,6 +26,24 @@ router.get("/", async (req, res, next) => {
   }
 });
 
+
+// Obtener productos filtrados por nombre, price, SKU y/o precio
+router.get("/filter", async (req, res, next) => {
+  try {
+    const { name, sku, price } = req.query;
+    const response = await Product.getFilteredProducts(name, sku, price);
+    console.log(response);
+    res.status(200).json({
+      statusCode: 200,
+      message: "Productos filtrados obtenidos exitosamente",
+      data: response.data,
+    });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
 // Obtener productos registrados por el vendedor
 router.post(
   "/myproducts",
@@ -47,6 +65,56 @@ router.post(
     }
   }
 );
+
+// // Obtener productos filtrados por nombre
+// router.get("/name/:name", async (req, res, next) => {
+//   try {
+//     const name = req.params.name.toLowerCase();
+//     const data = await Product.getProductsByName(name);
+//     res.status(data.statusCode).json({
+//       statusCode: data.statusCode,
+//       message: data.message,
+//       error: data.error,
+//       data: data.data,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     next(error);
+//   }
+// });
+
+// // Obtener productos filtrados por SKU
+// router.get("/sku/:sku", async (req, res, next) => {
+//   try {
+//     const sku = req.params.sku.toLowerCase();
+//     const data = await Product.getProductsBySku(sku);
+//     res.status(data.statusCode).json({
+//       statusCode: data.statusCode,
+//       message: data.message,
+//       error: data.error,
+//       data: data.data,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     next(error);
+//   }
+// });
+
+// // Obtener productos filtrados por precio
+// router.post("/price", async (req, res, next) => {
+//   try {
+//     const maxPrice = req.body.price; // Asegúrate de que el cuerpo de la solicitud contenga el precio
+//     const data = await Product.getProductsByPrice(maxPrice);
+//     res.status(data.statusCode).json({
+//       statusCode: data.statusCode,
+//       message: data.message,
+//       data: data.data,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     next(error);
+//   }
+// });
 
 // Registrar producto
 // Solo usuarios registrados/vendedores

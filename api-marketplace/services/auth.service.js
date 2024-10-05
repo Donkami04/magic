@@ -5,16 +5,20 @@ const jwt = require("jsonwebtoken");
 const SECRET = process.env.JWT_SECRET;
 
 async function loginUser(email, password) {
+  console.log(email, password);
   try {
+    if (!email || !password)
+      return { statusCode: 400, message: "Email y password requeridos" };
     const user = await User.findOne({ where: { email: email } });
     if (!user) {
-      return { statusCode: 401, message: "Incorrect email or password" };
+      return { statusCode: 401, message: "Email o password incorrectos" };
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      console.log(isMatch);
       return {
         statusCode: 401,
-        message: "Incorrect email or password",
+        message: "Email o password incorrectos",
         data: null,
       };
     }

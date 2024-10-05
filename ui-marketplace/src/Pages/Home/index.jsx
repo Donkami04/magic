@@ -1,105 +1,291 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import { ShoppingCartContext } from "../../Context/ShoppingCart";
 import { getProducts } from "../../Services/Api/products";
 import { Card } from "../../Components/Card";
 import { Loading } from "../../Components/Loading";
-import { Layout } from "../../Components/Layout";
 import { ErrorOverlay } from "../../Components/ErrorOverlay";
-import { Products } from "../../Components/Products";
 
+/**
+ * Products component for displaying and filtering a list of products.
+ * @returns {JSX.Element} The rendered Products component
+ */
 export const Home = () => {
+  // State variables
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showError, setShowError] = useState(true);
-  const [filteredObjects, setFilteredObjects] = useState([]);
-  const context = useContext(ShoppingCartContext);
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [searchNameValue, setSearchNameValue] = useState("");
+  const [searchSkuValue, setSearchSkuValue] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [maxPriceFormatted, setMaxPriceFormatted] = useState("");
+  const [showFiltersMobile, setShowFiltersMobile] = useState(false);
+  const [showMenuMobile, setShowMenuMobile] = useState(true);
+  const filtersRef = useRef(null); // Crea un ref para el contenedor del menú
 
-  const products = context.products;
-
-  const handleFilterName = (event) => {
-    const result = products.filter((product) =>
-      product.name.includes(event.target.value)
-    );
-    setFilteredObjects(result);
+  const toggleMenuMobile = () => {
+    // setShowMenuMobile(!showMenuMobile);
+    setShowFiltersMobile(!showFiltersMobile);
   };
 
-  // const hideError = () => {
-  //   setError(null);
-  //   setShowError(false);
-  // };
+  const context = useContext(ShoppingCartContext);
 
-  // if (loading) {
-  //   return (
-  //     <div>
-  //       <Loading />
-  //     </div>
-  //   );
-  // }
+  /**
+   * Handles changes in the name filter input.
+   * @param {React.ChangeEvent<HTMLInputElement>} event - The input change event
+   */
+  const handleFilterName = (event) => {
+    const newNameValue = event.target.value;
+    setSearchNameValue(newNameValue);
+    filterProducts(newNameValue, searchSkuValue, maxPrice);
+  };
 
-  // if (error) {
-  //   return (
-  //     <ErrorOverlay
-  //       message="Ha ocurrido un error del servidor."
-  //       onClose={hideError}
-  //     />
-  //   );
-  // }
+  /**
+   * Handles changes in the SKU filter input.
+   * @param {React.ChangeEvent<HTMLInputElement>} event - The input change event
+   */
+  const handleFilterSku = (event) => {
+    const newSkuValue = event.target.value;
+    setSearchSkuValue(newSkuValue);
+    filterProducts(searchNameValue, newSkuValue, maxPrice);
+  };
 
+  /**
+   * Handles changes in the price filter input.
+   * Formats the input as a price and updates both numeric and formatted states.
+   * @param {React.ChangeEvent<HTMLInputElement>} event - The input change event
+   */
+  const handleFilterPrice = (event) => {
+    const inputValue = event.target.value.replace(/[^0-9]/g, "");
+    const numericValue = parseInt(inputValue, 10);
+
+    if (!isNaN(numericValue)) {
+      setMaxPrice(numericValue);
+      setMaxPriceFormatted(context.formatPrice(numericValue));
+      filterProducts(searchNameValue, searchSkuValue, numericValue);
+    } else {
+      setMaxPrice("");
+      setMaxPriceFormatted("");
+      filterProducts(searchNameValue, searchSkuValue, "");
+    }
+  };
+
+  /**
+   * Filters the products based on name, SKU, and price criteria.
+   * @param {string} name - The name filter value
+   * @param {string} sku - The SKU filter value
+   * @param {number|string} price - The maximum price filter value
+   */
+  const filterProducts = (name, sku, price) => {
+    let filtered = products;
+
+    if (name) {
+      filtered = filtered.filter((product) =>
+        product.name.toLowerCase().includes(name.toLowerCase())
+      );
+    }
+
+    if (sku) {
+      filtered = filtered.filter((product) =>
+        product.sku.toLowerCase().includes(sku.toLowerCase())
+      );
+    }
+
+    if (price) {
+      filtered = filtered.filter((product) => {
+        const productPrice = parseFloat(product.price);
+        return !isNaN(productPrice) && productPrice <= price;
+      });
+    }
+
+    setFilteredProducts(filtered);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (filtersRef.current && !filtersRef.current.contains(event.target)) {
+        setShowFiltersMobile(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Fetch products data on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const { data } = await getProducts();
+        const modifiedData = data.map((product) => ({
+          ...product,
+          formattedPrice: context.formatPrice(product.price),
+        }));
+        setProducts(modifiedData);
+        setFilteredProducts(modifiedData);
+      } catch (error) {
+        setError("Error al obtener la lista de productos desde el servidor");
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Render loading state
+  if (loading) {
+    return <Loading />;
+  }
+
+  // Render error state
+  if (error) {
+    return <ErrorOverlay message={error} onClose={() => setError(null)} />;
+  }
+
+  // Main component render
   return (
-    <Products>
-      <div className="flex flex-col h-[50%] items-center justify-between mt-4 ">
-        <div className="mb-4">
-          <input
-            type="email"
-            id="email"
-            placeholder="Ej. Bolso"
-            // value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 "
-          />
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-white"
-          >
-            Buscar por nombre
-          </label>
+    <main className="h-heighWithOutNav  absolute top-20 overflow-auto grid w-full pl-[10%] pr-[10%] bg-radial-custom max-sm:p-0">
+      <div className="mt-5 ml-auto mr-auto flex max-sm:flex-col">
+        {/* Filtros pantallas grandes */}
+        <aside className=" text-white w-72 bg-transparent max-sm:hidden">
+          {/* <div className="flex flex-col h-[50%] items-center justify-between mt-4 "> */}
+          {/* Name filter input */}
+          <form className="flex flex-col items-center" action="">
+            <div className="mb-10">
+              <input
+                type="text"
+                id="name"
+                placeholder="Buscar producto"
+                value={searchNameValue}
+                onChange={handleFilterName}
+                className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 "
+              />
+            </div>
+            {/* SKU filter input */}
+            <div className="mb-10">
+              <input
+                type="text"
+                id="sku"
+                placeholder="Filtrar por SKU"
+                value={searchSkuValue}
+                onChange={handleFilterSku}
+                className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 "
+              />
+            </div>
+            {/* Price filter input */}
+            <div className="mb-10">
+              <input
+                type="text"
+                id="maxPrice"
+                placeholder="Precio maximo"
+                value={maxPriceFormatted}
+                onChange={handleFilterPrice}
+                className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 "
+              />
+            </div>
+            <button className="bg-blue-magiclog w-32 h-10 rounded-2xl m-auto hover:animate-glow hover:bg-white hover:bg-darkblue-magiclog">
+              Buscar
+            </button>
+          </form>
+          {/* </div> */}
+        </aside>
+        {/* Filtro para mobile */}
+        <div className="bg-blue-600 sm:hidden max-sm:flex max-sm:flex-col max-sm:items-center ">
+          {/* <div
+          ref={filtersRef}
+          className="sm:hidden max-sm:flex max-sm:flex-col max-sm:items-center max-sm:w-full bg-black border-t border-b border-white"
+        > */}
+          {showFiltersMobile && (
+            <div
+              ref={filtersRef}
+              className="pt-2 bg-black w-full flex flex-col items-center border-b border-white "
+            >
+              {/* Name filter input */}
+              <div className="mb-4 w-56">
+                <input
+                  type="text"
+                  id="name"
+                  placeholder="Buscar producto"
+                  value={searchNameValue}
+                  onChange={handleFilterName}
+                  required
+                  className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                />
+              </div>
+              {/* SKU filter input */}
+              <div className="mb-4 w-56">
+                {/* <label
+                  htmlFor="sku"
+                  className="block text-sm font-medium text-white"
+                >
+                  Buscar por SKU
+                </label> */}
+                <input
+                  type="text"
+                  id="sku"
+                  placeholder="Filtrar por SKU"
+                  value={searchSkuValue}
+                  onChange={handleFilterSku}
+                  required
+                  className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                />
+              </div>
+              {/* Price filter input */}
+              <div className="mb-4 w-56">
+                {/* <label
+                  htmlFor="maxPrice"
+                  className="block text-sm font-medium text-white"
+                >
+                  Filtrar por precio
+                </label> */}
+                <input
+                  type="text"
+                  id="maxPrice"
+                  placeholder="Precio maximo"
+                  value={maxPriceFormatted}
+                  onChange={handleFilterPrice}
+                  required
+                  className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+                />
+              </div>
+            </div>
+          )}
+          <div className="flex sticky text-white w-full justify-center h-10 bg-black">
+            <div
+              className="cursor-pointer flex justify-evenly items-center h-full w-56"
+              onClick={toggleMenuMobile}
+            >
+              <img className="w-6 h-6" src="/glass.svg" alt="Abrir filtros" />
+              <p>Filtrar productos</p>
+            </div>
+          </div>
+
+          {/* </div> */}
         </div>
-        <div className="mb-4">
-          <input
-            type="email"
-            id="email"
-            placeholder="Ej. Bolso"
-            // value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 "
-          />
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-white"
-          >
-            Buscar por SKU
-          </label>
-        </div>
-        <div className="mb-4">
-          <input
-            type="email"
-            id="email"
-            placeholder="Ej. Bolso"
-            // value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 "
-          />
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-white"
-          >
-            Filtrar por precio
-          </label>
+        {/* Product list or "No products found" message */}
+        <div className="flex flex-col w-128">
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => (
+              <div className="ml-20" key={product.product_id}>
+                <Card product={product} />
+                <div className="border-b border-white"></div>
+              </div>
+            ))
+          ) : (
+            <div className=" text-white font-bold border-b border-white h-40   pl-5 ml-20 pr-5 inset-0 flex items-center justify-center max-sm:relative">
+              <p className="h-92 text-center">
+                No se encontraron productos <span className="text-2xl">😭</span>
+              </p>
+            </div>
+          )}
         </div>
       </div>
-    </Products>
+    </main>
   );
 };

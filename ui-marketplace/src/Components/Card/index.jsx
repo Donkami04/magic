@@ -5,7 +5,7 @@ import { ShoppingCartContext } from "../../Context/ShoppingCart";
 export const Card = (product) => {
   const context = useContext(ShoppingCartContext);
   return (
-    <div className="flex mt-5 mb-5 pl-5 pr-5 w-[100%] text-white max-sm:w-[100%] ">
+    <div className="flex mb-5 pl-5 pr-5 width-products text-white max-sm:w-[100%] ">
       <img
         src="https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_.jpg"
         alt=""
@@ -21,7 +21,7 @@ export const Card = (product) => {
         <p className="text-white">{product.product.sku}</p>
 
         <button
-          onClick={() => context.setCountItems(contex.countItems + 1)}
+          onClick={() => context.setCountItems(context.countItems + 1)}
           className="bg-cyan-600 rounded-full w-10 h-10 "
         >
           <img
