@@ -26,7 +26,7 @@ export const Card = ({ product, handleSubmitDelete }) => {
   }, []);
 
   return (
-    <div className="flex my-5 w-[90%] lg:pr-5 width-products ml-5 text-white">
+    <div className="flex my-5 w-full lg:pr-5 width-products ml-5 text-white">
       <img
         src="/teclado.webp"
         alt=""

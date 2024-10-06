@@ -147,8 +147,8 @@ export const Home = () => {
   );
 
   return (
-    <main className="h-heighWithOutNav absolute top-20 overflow-auto grid w-full pl-[10%] pr-[10%] bg-radial-custom max-sm:p-0">
-      <div className="mt-5 flex max-md:flex-col">
+    <main className="h-heighWithOutNav absolute top-20 w-full flex justify-center overflow-auto pl-[10%] pr-[10%] bg-radial-custom max-sm:p-0">
+      <div className="mt-5 flex max-md:flex-col w-92">
         {/* Filters for larger screens */}
         <aside className="text-white w-72 bg-transparent max-md:hidden mt-5">
           <form className="flex flex-col items-center" onSubmit={handleSubmit}>
@@ -214,7 +214,7 @@ export const Home = () => {
         </div>
 
         {/* Product list */}
-        <div className="flex flex-col lg:w-128 max-sm:items-center max-sm:justify-center">
+        <div className="flex flex-col w-128 max-sm:w-96 max-sm:items-center max-sm:justify-center">
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
               <div
