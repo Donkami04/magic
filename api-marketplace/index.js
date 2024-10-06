@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const PORT = process.env.NODE_PORT || 3000;
-const sequelize = require("./libs/sequelize");
+const sequelize = require("./libs/sequelizeProd");
 const { allRoutes } = require("./routes/index.routes");
 const {
   logErrors,

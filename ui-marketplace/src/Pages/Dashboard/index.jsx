@@ -2,6 +2,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+// Definicion de constantes
+const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT || "local";
+
+let base_url = "";
+if (ENVIRONMENT === "production") {
+  base_url = "https://magic-log.onrender.com";
+} else {
+  base_url = "http://localhost:3000";
+}
 // Contexts
 import { useShoppingContext } from "../../Context/ShoppingCart";
 import { useAuth } from "../../Context/Auth";
@@ -117,7 +126,7 @@ export const Dashboard = () => {
     setSuccess(null);
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/v1/marketplace/products/new",
+        `${base_url}/api/v1/marketplace/products/new`,
         newProduct,
         {
           headers: {

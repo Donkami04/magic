@@ -1,10 +1,12 @@
 import axios from "axios";
-// const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT || "local";
+const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT || "local";
 
-let base_url = "https://magic-log.onrender.com"
-// if (ENVIRONMENT === "production") {
-//   base_url = "https://magic-log.onrender.com"
-// }
+let base_url = ""
+if (ENVIRONMENT === "production") {
+  base_url = "https://magic-log.onrender.com"
+} else {
+  base_url = "http://localhost:3000"
+}
 
 export const BASE_API_URL = `${base_url}/api/v1/marketplace`;
 
@@ -19,7 +21,7 @@ export const getProducts = async (name = '', price = '', sku = '') => {
 
   // Unir los parámetros con '&' para formar la cadena de consulta
   const queryString = queryParams.length ? `?${queryParams.join('&')}` : '';
-  console.log(`${BASE_API_URL}/products/filter${queryString}`);
+
   return axios
     .get(`${BASE_API_URL}/products/filter${queryString}`)
     .then((response) => response.data)

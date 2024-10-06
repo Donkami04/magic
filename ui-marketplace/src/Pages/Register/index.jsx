@@ -1,6 +1,16 @@
 // React Importaciones
 import { useState } from "react";
 
+// Definicion de constantes
+const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT || "local";
+
+let base_url = "";
+if (ENVIRONMENT === "production") {
+  base_url = "https://magic-log.onrender.com";
+} else {
+  base_url = "http://localhost:3000";
+}
+
 // Contexts
 import { useShoppingContext } from "../../Context/ShoppingCart";
 
@@ -59,7 +69,7 @@ export const Register = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/v1/marketplace/users/new",
+        `${base_url}/api/v1/marketplace/users/new`,
         {
           name,
           email,
