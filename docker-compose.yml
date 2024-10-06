@@ -24,5 +24,23 @@ services:
     depends_on:
       - postgres
 
+  backend-api-rest:
+    build:
+      context: Backend
+    ports:
+      - '3001:3001'
+    restart: always
+    environment:
+      - NODE_ENV=production
+  #   # command: sh -c "npx sequelize-cli db:migrate && node index.js"
+      
+  frontend-react:
+    build:
+      context: Front
+    ports:
+      - '4000:80'
+    restart: always
+
+
 volumes:
   postgres_data:
