@@ -4,8 +4,8 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert('users', [
       {
-        name: 'Jorge',
-        email: 'jorge@mail.com',
+        name: 'May',
+        email: 'may@mail.com',
         password: '$2b$10$Zc.ejEabujCNndC/w2SRX.Fh/bTpAvnPeRFdI9HL3fa588GO/p1oW',
         rol: 'vendedor',
       },
@@ -13,6 +13,6 @@ module.exports = {
   },
 
   down: async (queryInterface) => {
-    await queryInterface.bulkDelete('users', { email: 'jorge@mail.com' }, {});
+    await queryInterface.bulkDelete('users', { email: 'may@mail.com' }, {});
   },
 };

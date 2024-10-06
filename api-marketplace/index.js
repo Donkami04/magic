@@ -17,10 +17,9 @@ app.use(express.json());
 
 app.use(cors({
   origin: [
-  'http://localhost:5173',
-  'https://magic-ws6m.onrender.com',
-  '*'
-],
+    'http://localhost:5173',
+    'https://magic-ws6m.onrender.com',
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
