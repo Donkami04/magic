@@ -3,16 +3,17 @@ import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 // Contexts
-import { ShoppingCartContext } from "../../Context/ShoppingCart";
+import { useShoppingContext } from "../../Context/ShoppingCart";
 
 // Iconos
 import { MdEdit } from "react-icons/md";
 import { FaTrash } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
 
 export const Card = ({ product, handleSubmitDelete }) => {
   const [adminButtons, setAdminButtons] = useState(null);
   const [noButtons, setNoButtons] = useState(null);
-  const context = useContext(ShoppingCartContext);
+  const { setCountItems, countItems } = useShoppingContext();
   const location = useLocation();
 
   useEffect(() => {
@@ -42,15 +43,10 @@ export const Card = ({ product, handleSubmitDelete }) => {
 
         {!noButtons && !adminButtons && (
           <button
-            onClick={() => context.setCountItems(context.countItems + 1)}
-            className="bg-cyan-600 rounded-full w-10 h-10 "
+            onClick={() => setCountItems(countItems + 1)}
+            className="bg-cyan-600 rounded-full w-10 h-10 grid place-content-center"
           >
-            <img
-              title="Agregar al carrito"
-              className="w-6 h-6 m-auto"
-              src="/add-shoping.svg"
-              alt="Agregar al carrito"
-            />
+            <FaShoppingCart size="1.5rem" />
           </button>
         )}
         {!noButtons && adminButtons && (

@@ -11,21 +11,24 @@ import { getProducts } from "../../Services/Api/Products/products";
 import { Card } from "../../Components/Card";
 import { Loading } from "../../Components/Loading";
 import { ErrorOverlay } from "../../Components/ErrorOverlay";
+import { FilterInput } from "../../Components/FilterInput";
 
 // Iconos
 import { BsFillSearchHeartFill } from "react-icons/bs";
 import { GiBroom } from "react-icons/gi";
-import { FilterInput } from "../../Components/FilterInput";
+import { FaMagnifyingGlass } from "react-icons/fa6";
+import { IoClose } from "react-icons/io5"; // Importa el icono de cierre
 
 export const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [searchNameValue, setSearchNameValue] = useState("");
-  const [searchSkuValue, setSearchSkuValue] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-  const [maxPriceFormatted, setMaxPriceFormatted] = useState("");
+  const [searchParams, setSearchParams] = useState({
+    name: "",
+    sku: "",
+    price: "",
+  });
   const [showFiltersMobile, setShowFiltersMobile] = useState(false);
   const { formatPrice } = useShoppingContext();
   const filtersRef = useRef(null);
@@ -53,25 +56,19 @@ export const Home = () => {
     fetchData();
   }, []);
 
-  // Obtenemos el valor numerico del price
-  // y seteamos su valor en formato de dinero
   const handleFilterPrice = (event) => {
     const inputValue = event.target.value.replace(/[^0-9]/g, "");
     const numericValue = parseInt(inputValue, 10);
 
     if (!isNaN(numericValue)) {
-      setMaxPrice(numericValue);
-      setMaxPriceFormatted(formatPrice(numericValue));
+      setSearchParams((prev) => ({ ...prev, price: numericValue }));
     } else {
-      setMaxPrice("");
-      setMaxPriceFormatted("");
+      setSearchParams((prev) => ({ ...prev, price: "" }));
     }
   };
 
   const toggleMenuMobile = () => setShowFiltersMobile(!showFiltersMobile);
 
-  // Se emplea para cerrar el menu mobile cuando
-  // se hace click fuera de este
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (filtersRef.current && !filtersRef.current.contains(event.target)) {
@@ -88,14 +85,14 @@ export const Home = () => {
     event.preventDefault();
     try {
       setLoading(true);
-      const data = {
-        name: searchNameValue,
-        price: maxPrice,
-        sku: searchSkuValue,
-      };
-      const response = await getProducts(data.name, data.price, data.sku);
+      const response = await getProducts(
+        searchParams.name,
+        searchParams.price,
+        searchParams.sku
+      );
       const statusCode = response?.statusCode || 500;
       if (statusCode === 200) {
+        setShowFiltersMobile(false);
         const modifiedData = response.data.map((product) => ({
           ...product,
           formattedPrice: formatPrice(product.price),
@@ -111,22 +108,43 @@ export const Home = () => {
     }
   };
 
-  // Limpiamos los datos
   const clearFilters = (e) => {
     e.preventDefault();
-    setSearchNameValue("");
-    setSearchSkuValue("");
-    setMaxPrice("");
-    setMaxPriceFormatted("");
+    setSearchParams({ name: "", sku: "", price: "" });
     setFilteredProducts(products);
   };
 
-  // Render loading state
-  if (loading) return <Loading />;
+  const closeFiltersMobile = () => {
+    setShowFiltersMobile(false);
+  };
 
-  // Render error overlay
+  if (loading) return <Loading />;
   if (error)
     return <ErrorOverlay message={error} onClose={() => setError(null)} />;
+
+  const renderFilterInputs = () => (
+    <>
+      <FilterInput
+        placeholder="Buscar producto"
+        value={searchParams.name}
+        onChange={(event) =>
+          setSearchParams((prev) => ({ ...prev, name: event.target.value }))
+        }
+      />
+      <FilterInput
+        placeholder="Filtrar por SKU"
+        value={searchParams.sku}
+        onChange={(event) =>
+          setSearchParams((prev) => ({ ...prev, sku: event.target.value }))
+        }
+      />
+      <FilterInput
+        placeholder="Precio máximo"
+        value={searchParams.price}
+        onChange={handleFilterPrice}
+      />
+    </>
+  );
 
   return (
     <main className="h-heighWithOutNav absolute top-20 overflow-auto grid w-full pl-[10%] pr-[10%] bg-radial-custom max-sm:p-0">
@@ -134,21 +152,7 @@ export const Home = () => {
         {/* Filters for larger screens */}
         <aside className="text-white w-72 bg-transparent max-md:hidden mt-5">
           <form className="flex flex-col items-center" onSubmit={handleSubmit}>
-            <FilterInput
-              placeholder="Buscar producto"
-              value={searchNameValue}
-              onChange={(event) => setSearchNameValue(event.target.value)}
-            />
-            <FilterInput
-              placeholder="Filtrar por SKU"
-              value={searchSkuValue}
-              onChange={(event) => setSearchSkuValue(event.target.value)}
-            />
-            <FilterInput
-              placeholder="Precio máximo"
-              value={maxPriceFormatted}
-              onChange={handleFilterPrice}
-            />
+            {renderFilterInputs()}
             <div className="flex justify-between w-full">
               <button
                 type="submit"
@@ -171,24 +175,16 @@ export const Home = () => {
           {showFiltersMobile && (
             <div
               ref={filtersRef}
-              className="h-64 pt-3 z-10 absolute top-0 bg-black bg-opacity-90 w-full flex flex-col items-center border-b border-sky-500"
+              className="h-96 pt-3 z-10 absolute top-0 bg-black bg-opacity-90 w-full flex flex-col items-center border-b border-sky-500"
             >
+              <button
+                onClick={closeFiltersMobile}
+                className="self-end p-2 text-white"
+              >
+                <IoClose size="1.5rem" />
+              </button>
               <form onSubmit={handleSubmit}>
-                <FilterInput
-                  placeholder="Buscar producto"
-                  value={searchNameValue}
-                  onChange={(event) => setSearchNameValue(event.target.value)}
-                />
-                <FilterInput
-                  placeholder="Filtrar por SKU"
-                  value={searchSkuValue}
-                  onChange={(event) => setSearchSkuValue(event.target.value)}
-                />
-                <FilterInput
-                  placeholder="Precio máximo"
-                  value={maxPriceFormatted}
-                  onChange={handleFilterPrice}
-                />
+                {renderFilterInputs()}
                 <div className="flex justify-between w-full max-sm:justify-evenly">
                   <button
                     type="submit"
@@ -211,7 +207,7 @@ export const Home = () => {
               className="cursor-pointer flex justify-evenly items-center h-full w-56"
               onClick={toggleMenuMobile}
             >
-              <img className="w-6" src="/glass.svg" alt="Abrir filtros" />
+              <FaMagnifyingGlass />
               <p>Filtrar productos</p>
             </div>
           </div>

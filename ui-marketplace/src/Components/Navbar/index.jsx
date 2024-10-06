@@ -16,6 +16,7 @@ import { IoLogOut } from "react-icons/io5";
 import { IoMdHome } from "react-icons/io";
 import { HiMiniShoppingBag } from "react-icons/hi2";
 import { HiMenuAlt3 } from "react-icons/hi";
+import { IoLogIn } from "react-icons/io5";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -209,7 +210,7 @@ export const Navbar = () => {
                   to=""
                   className="flex justify-evenly relative blue-magiclog"
                 >
-                  <img className="fill-current w-6 h-6" src="/login.svg" />
+                  <IoLogIn color="bg-blue-magiclog" size="1.8rem" />
                   <span className="grid place-items-center w-[40%]">
                     Registrarse
                   </span>

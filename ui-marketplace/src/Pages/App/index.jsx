@@ -1,12 +1,13 @@
-import React from "react";
+// React Importaciones
 import { useRoutes, BrowserRouter } from "react-router-dom";
+
+// Contexts
 import { ShoppingCartProvider } from "../../Context/ShoppingCart";
-import { AuthProvider } from "../../Context/Auth"; // Importa el AuthProvider
+import { AuthProvider } from "../../Context/Auth";
+
+// Componentes
 import { Navbar } from "../../Components/Navbar";
 import { Home } from "../Home";
-import { Login } from "../Login";
-import { Register } from "../Register";
-// import { NewProduct } from "../NewProduct";
 import { Dashboard } from "../Dashboard";
 import { Admin } from "../../Pages/Admin";
 import { NotFound } from "../../Components/NotFound";

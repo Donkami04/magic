@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* * {
-    overflow-x: hidden;
-} */
-
 @layer utilities {
   .bg-radial-custom {
     background-image: linear-gradient(
@@ -52,6 +48,6 @@
     background-color: #13B2EE; /* Color al hacer hover */
   }
   
-  
+
   
 }
