@@ -14,7 +14,6 @@ async function loginUser(email, password) {
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      console.log(isMatch);
       return {
         statusCode: 401,
         message: "Email o password incorrectos",

@@ -8,24 +8,26 @@ import { useAuth } from "../../Context/Auth";
 // Componentes
 import { ContentForm } from "../../Components/ContentForm";
 import { Loading } from "../../Components/Loading";
+import { OverlayLoading } from "../../Components/OverlayLoading";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
   const { user, login, loading, setLoading } = useAuth();
   const { error, setError } = useAuth();
 
   useEffect(() => {
     try {
+      setLoading(true);
+      console.log(loading);
       if (user && user.rol === "vendedor") {
         console.log(user.rol);
         navigate("/dashboard");
         // setLoading(false);
       }
       if (user && user.rol === "admin") {
-        console.log("admin");
+        console.log(user.rol);
         navigate("/admin");
         // setLoading(false);
       }
@@ -56,7 +58,7 @@ export const Login = () => {
   };
 
   if (loading) {
-    return <Loading />;
+    return <OverlayLoading />;
   }
 
   return (

@@ -17,7 +17,7 @@ services:
     image: dpage/pgadmin4
     container_name: pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL:  
+      PGADMIN_DEFAULT_EMAIL: admin@marketplace.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "8080:80"

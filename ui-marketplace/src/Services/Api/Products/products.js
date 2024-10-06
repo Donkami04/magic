@@ -31,4 +31,3 @@ export const getProducts = async (name = '', price = '', sku = '') => {
     });
 };
 
-console.log(`${BASE_API_URL}/products/filter`);
