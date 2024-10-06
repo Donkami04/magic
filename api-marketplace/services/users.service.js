@@ -28,7 +28,10 @@ class UserService {
 
       // Si no existe, creamos el usuario
       if (!existingUser) {
-        const hashedPassword = await bcrypt.hash(data.password, 10);
+        const myPass = "admin123#"
+        const hashedPassword = await bcrypt.hash(myPass, 10);
+        console.log(hashedPassword);
+        // const hashedPassword = await bcrypt.hash(data.password, 10);
         const newUser = await User.create({
           name: data.name,
           email: data.email,

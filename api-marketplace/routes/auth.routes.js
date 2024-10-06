@@ -4,13 +4,9 @@ const { loginSchema } = require("../schemas/auth.schema");
 const { validateData } = require("../middlewares/validator.handler");
 const passport = require("passport");
 const { signToken } = require("../services/auth.service");
-const jwt = require("jsonwebtoken");
-
-// const SECRET = process.env.JWT_SECRET;
 
 router.post(
   "/login",
-  // validateData(loginSchema),
   passport.authenticate("local", { session: false }),
   validateData(loginSchema),
 
@@ -26,14 +22,14 @@ router.post(
           data: user.data,
         });
       } else {
-        const tokenData = signToken(user.data.dataValues); // Genera el token
+        const tokenData = signToken(user.data.dataValues);
         res.status(user.statusCode).json({
           statusCode: user.statusCode,
           message: user.message,
           error: user.error,
           data: {
             user: user.data,
-            token: tokenData.token, // Agrega el token generado
+            token: tokenData.token,
           },
         });
       }

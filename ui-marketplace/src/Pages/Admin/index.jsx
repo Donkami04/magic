@@ -26,7 +26,9 @@ const SelectUser = ({ usersList, selectedUser, onUserChange }) => (
     value={selectedUser}
     className="w-40 md:mt-5 scrollbar text-center select:ring-cyan-500 bg-gray-800 text-white p-2 rounded-md border-2 border-blue-500 focus:ring-2 focus:ring-blue-500"
   >
-    <option value="">Vendedores</option>
+    <option value="" disabled>
+      Vendedores
+    </option>
     {usersList.map((user) => (
       <option key={user.user_id} value={user.user_id}>
         {user.name.toUpperCase()}

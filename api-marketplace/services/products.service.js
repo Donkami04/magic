@@ -55,21 +55,19 @@ class ProductService {
 
   async createProduct(data, userData) {
     try {
-      // Validar que se proporcione el user_id
+
       if (!userData.user_id) {
         return {
           statusCode: 400,
           message: "User ID is required to create a product.",
         };
       }
-
-      // Crear un nuevo producto
       const newProduct = await Product.create({
         name: data.name.toLowerCase(),
         sku: data.sku.toLowerCase(),
         quantity: data.quantity || 0,
         price: data.price,
-        user_id: userData.user_id, // Asignar el user_id proporcionado
+        user_id: userData.user_id,
       });
 
       return {

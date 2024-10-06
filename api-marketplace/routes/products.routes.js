@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const {
-  productSchema,
-  editProductSchema,
-} = require("../schemas/product.schema");
+const { productSchema } = require("../schemas/product.schema");
 const { validateData } = require("../middlewares/validator.handler");
 const { checkRoles } = require("../middlewares/auth.handler");
 const passport = require("passport");
@@ -111,6 +108,7 @@ router.post(
   }
 );
 
+// Editar producto
 router.put(
   "/edit/:id",
   passport.authenticate("jwt", { session: false }),
@@ -136,6 +134,7 @@ router.put(
   }
 );
 
+// Eliminar
 router.delete(
   "/delete/:id",
   passport.authenticate("jwt", { session: false }),

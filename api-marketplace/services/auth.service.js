@@ -24,7 +24,6 @@ async function loginUser(email, password) {
     delete user.dataValues.password;
     return { statusCode: 200, message: "Ok", data: user };
   } catch (error) {
-    // console.error(error);
     throw error;
   }
 }
@@ -45,18 +44,5 @@ const signToken = (user) => {
     console.error(error);
   }
 }
-
-
-// Este es tu controlador para decodificar el JWT
-// const decodeTokenController = (token) => {
-//   const token = req.header('Authorization'); // Suponiendo que el token viene en el header Authorization
-//   const secret = process.env.JWT_SECRET;    // Almacena el secreto en las variables de entorno
-
-//   if (!token) {
-//     return res.status(401).json({ message: 'Token no provisto' });
-//   }
-
-// };
-
 
 module.exports = { loginUser, signToken };

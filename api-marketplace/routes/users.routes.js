@@ -3,9 +3,7 @@ const router = express.Router();
 const { createUserSchema } = require("../schemas/users.schema");
 const { validateData } = require("../middlewares/validator.handler");
 const { checkRoles } = require("../middlewares/auth.handler");
-const passport = require("passport");
-
-// const passport = require("passport");
+const passport = require("passport");;
 const { UserService } = require("../services/users.service");
 
 const User = new UserService();
