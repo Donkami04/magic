@@ -1,17 +1,21 @@
-const { Sequelize } = require('sequelize');
-const { config } = require('../config/config');
+const { config } = require("../config/config");
 
-
-// Crear una instancia de Sequelize con la configuración SSL
-const sequelize = new Sequelize('defaultdb', 'avnadmin', 'AVNS_aunycxTV5QWYo08va_b', {
-    host: 'pg-12255df1-marketplace-db.h.aivencloud.com',
+module.exports = {
+  development: {
+    url: config.dbUrl,
+    dialect: "postgres",
+  },
+  production: {
+    username: "avnadmin",
+    password: "AVNS_aunycxTV5QWYo08va_b",
+    database: "defaultdb",
+    host: "pg-12255df1-marketplace-db.h.aivencloud.com",
     port: 18570,
-    dialect: 'postgres',
-    logging: config.isProd ? false : true,
+    dialect: "postgres",
     dialectOptions: {
-        ssl: {
-            rejectUnauthorized: true,
-            ca: `-----BEGIN CERTIFICATE-----
+      ssl: {
+        rejectUnauthorized: true,
+        ca: `-----BEGIN CERTIFICATE-----
 MIIEQTCCAqmgAwIBAgIUWcj/EOL7o38W4kuSpIerGq16l3IwDQYJKoZIhvcNAQEM
 BQAwOjE4MDYGA1UEAwwvYzllMTQ4YzMtNTRiYS00OTM5LWIyN2EtNzFkM2U3YmNk
 ODE0IFByb2plY3QgQ0EwHhcNMjQxMDA2MDkwNTM1WhcNMzQxMDA0MDkwNTM1WjA6
@@ -35,18 +39,8 @@ ZEntIkv2q8c0jUMPBdi+TOMkVmPUo3jJEqdFMp9Yn4i0m9pqvYNN+b8nZXf58BV8
 McViG0YKuHADQBKCi32YmATTvk4N58+KivxsDnJkViRCeM9FSwWfOyYcAX+l34zx
 6fla7olxhEkUEVNU+pKkoLtRPjq9UCdASph8YXb/q5b6sLTwY4lJMlkWiw34IwLM
 AeeGBFm3nLQqs7uyjv7eHXxLRNOnqWOknTp4wxwRp49YUN3eGg==
------END CERTIFICATE-----`
-        }
+-----END CERTIFICATE-----`,
+      },
     },
-});
-
-// Probar la conexión
-sequelize.authenticate()
-    .then(() => {
-        console.log('Conexión exitosa con la base de datos.');
-    })
-    .catch(err => {
-        console.error('Error al conectar con la base de datos:', err);
-    });
-
-    module.exports = sequelize;
+  },
+};

@@ -1,17 +1,16 @@
-const { Sequelize } = require('sequelize');
-const { config } = require('../config/config');
+const fs = require('fs');
+const pg = require('pg');
+const url = require('url');
 
-
-// Crear una instancia de Sequelize con la configuración SSL
-const sequelize = new Sequelize('defaultdb', 'avnadmin', 'AVNS_aunycxTV5QWYo08va_b', {
-    host: 'pg-12255df1-marketplace-db.h.aivencloud.com',
+const config = {
+    user: "avnadmin",
+    password: "AVNS_aunycxTV5QWYo08va_b",
+    host: "pg-12255df1-marketplace-db.h.aivencloud.com",
     port: 18570,
-    dialect: 'postgres',
-    logging: config.isProd ? false : true,
-    dialectOptions: {
-        ssl: {
-            rejectUnauthorized: true,
-            ca: `-----BEGIN CERTIFICATE-----
+    database: "defaultdb",
+    ssl: {
+        rejectUnauthorized: true,
+        ca: `-----BEGIN CERTIFICATE-----
 MIIEQTCCAqmgAwIBAgIUWcj/EOL7o38W4kuSpIerGq16l3IwDQYJKoZIhvcNAQEM
 BQAwOjE4MDYGA1UEAwwvYzllMTQ4YzMtNTRiYS00OTM5LWIyN2EtNzFkM2U3YmNk
 ODE0IFByb2plY3QgQ0EwHhcNMjQxMDA2MDkwNTM1WhcNMzQxMDA0MDkwNTM1WjA6
@@ -35,18 +34,22 @@ ZEntIkv2q8c0jUMPBdi+TOMkVmPUo3jJEqdFMp9Yn4i0m9pqvYNN+b8nZXf58BV8
 McViG0YKuHADQBKCi32YmATTvk4N58+KivxsDnJkViRCeM9FSwWfOyYcAX+l34zx
 6fla7olxhEkUEVNU+pKkoLtRPjq9UCdASph8YXb/q5b6sLTwY4lJMlkWiw34IwLM
 AeeGBFm3nLQqs7uyjv7eHXxLRNOnqWOknTp4wxwRp49YUN3eGg==
------END CERTIFICATE-----`
-        }
+-----END CERTIFICATE-----`,
     },
-});
+};
 
-// Probar la conexión
-sequelize.authenticate()
-    .then(() => {
-        console.log('Conexión exitosa con la base de datos.');
-    })
-    .catch(err => {
-        console.error('Error al conectar con la base de datos:', err);
+const client = new pg.Client(config);
+client.connect(function (err) {
+    if (err)
+        throw err;
+    client.query("SELECT VERSION()", [], function (err, result) {
+        if (err)
+            throw err;
+
+        console.log(result.rows[0].version);
+        client.end(function (err) {
+            if (err)
+                throw err;
+        });
     });
-
-    module.exports = sequelize;
+});

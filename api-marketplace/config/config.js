@@ -5,8 +5,8 @@ const config = {
   port: process.env.PORT || 3000,
   isProd: process.env.NODE_ENV === 'production',
   dbUrl: process.env.DATABASE_URL,
+  jwtSecret: process.env.JWT_SECRET,
   // apiKey: process.env.API_KEY,
-  // jwtSecret: process.env.JWT_SECRET,
 }
 
 
