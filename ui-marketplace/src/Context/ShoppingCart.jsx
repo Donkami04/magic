@@ -1,28 +1,15 @@
-import { createContext, useState, useEffect, useContext } from "react";
-import { getProducts } from "../Services/Api/Products/products";
-import { createProduct } from "../Services/Api/Products/createProduct";
-import { deleteProduct } from "../Services/Api/Products/deleteProduct";
-import { getProductsBySeller } from "../Services/Api/Products/sellerProducts";
-// import { AuthContext, useAuth } from "./Auth";
+// React Importaciones
+import { createContext, useState, useContext } from "react";
 
 export const ShoppingCartContext = createContext();
 
 export const ShoppingCartProvider = ({ children }) => {
   const [countItems, setCountItems] = useState(0);
-  const [products, setProducts] = useState([]);
-  const [sellerProducts, setSellerProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [showError, setShowError] = useState(true);
-  const token = localStorage.getItem("jwtToken");
-  const [registerForm, setRegisterForm] = useState(false);
   const [loginForm, setLoginForm] = useState(false);
+  const [registerForm, setRegisterForm] = useState(null);
   const [newProductForm, setNewProductForm] = useState(null);
 
-  // const closeOtherMenus = () => {
-
-  // }
-
+  // Funciones auxiliares
   const formatPrice = (price) => {
     return (
       "$" +
@@ -33,7 +20,7 @@ export const ShoppingCartProvider = ({ children }) => {
     );
   };
 
-  // Aplicar la función a un array de objetos
+  // Cambia el formato de un numero a dinero
   const formatPricesInArray = (arr) => {
     return arr.map((obj) => ({
       ...obj,
@@ -41,92 +28,23 @@ export const ShoppingCartProvider = ({ children }) => {
     }));
   };
 
-  const hideError = () => {
-    setError(null);
-    setShowError(false);
-  };
-
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const { data } = await getProducts();
-      setProducts(data);
-    } catch (error) {
-      setError("Error al obtener la lista de productos desde el servidor");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const handleSubmitDelete = async (product) => {
-    try {
-      const productId = product.product.product_id;
-      const response = await deleteProduct(token, productId);
-      const statusCode = response?.statusCode || 500;
-      if (statusCode !== 200) {
-        setError("Error al eliminar el producto");
-      } else {
-        const newSellerProducts = await getProductsBySeller(token);
-        setSellerProducts(newSellerProducts);
-        setError("Producto eliminado");
-      }
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const getDashboardProducts = async (token) => {
-    setLoading(true);
-    try {
-      const { data } = await getProductsBySeller(token);
-      const modifiedData = data.map((product) => ({
-        ...product,
-        formattedPrice: formatPrice(product.price),
-      }));
-      setSellerProducts(modifiedData);
-    } catch (error) {
-      setError("Error al obtener la lista de productos desde el servidor");
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+  const contextValue = {
+    countItems,
+    setCountItems,
+    formatPrice,
+    formatPricesInArray,
+    setLoginForm,
+    loginForm,
+    setRegisterForm,
+    registerForm,
   };
 
   return (
-    <ShoppingCartContext.Provider
-      value={{
-        countItems,
-        setCountItems,
-        hideError,
-        products,
-        loading,
-        error,
-        setError,
-        formatPrice,
-        formatPricesInArray,
-        handleSubmitDelete,
-        getDashboardProducts,
-        sellerProducts,
-        setRegisterForm,
-        registerForm,
-        setLoginForm,
-        loginForm,
-        setNewProductForm,
-        newProductForm,
-      }}
-    >
+    <ShoppingCartContext.Provider value={contextValue}>
       {children}
     </ShoppingCartContext.Provider>
   );
 };
 
-export const useShoppingContext = () => {
-  return useContext(ShoppingCartContext);
-};
+// Hook personalizado para usar el contexto del carrito de compras
+export const useShoppingContext = () => useContext(ShoppingCartContext);

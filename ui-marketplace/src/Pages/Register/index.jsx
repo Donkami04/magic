@@ -1,7 +1,14 @@
-import React, { useState } from "react";
-import { ContentForm } from "../../Components/ContentForm";
+// React Importaciones
+import { useState } from "react";
+
+// Contexts
 import { useShoppingContext } from "../../Context/ShoppingCart";
+
+// Dependencia
 import axios from "axios";
+
+// Componentes
+import { ContentForm } from "../../Components/ContentForm";
 
 export const Register = () => {
   const [email, setEmail] = useState("");
@@ -12,7 +19,7 @@ export const Register = () => {
   const [success, setSuccess] = useState(null);
   const [colorEmailInput, setColorEmailInput] = useState("border-gray-300");
   const [shake, setShake] = useState(false);
-  const { registerForm, setRegisterForm, setLoginForm } = useShoppingContext();
+  const { setRegisterForm } = useShoppingContext();
 
   const validatePassword = (password) => {
     const minLength = 8;
@@ -30,7 +37,7 @@ export const Register = () => {
       return "La contraseña debe contener al menos un carácter especial.";
     }
 
-    return null; // Validación exitosa
+    return null;
   };
 
   const handleSubmit = async (e) => {
@@ -39,14 +46,12 @@ export const Register = () => {
     setSuccess(null);
     setColorEmailInput("border-gray-300");
 
-    // Validar contraseña antes de enviar
     const passwordError = validatePassword(password);
     if (passwordError) {
       setError(passwordError);
       return;
     }
 
-    // Validar que ambas contraseñas coincidan
     if (password !== confirmPassword) {
       setError("Las contraseñas no coinciden.");
       return;
@@ -69,9 +74,8 @@ export const Register = () => {
         setSuccess(response.data.message);
         setEmail("");
         setPassword("");
-        setConfirmPassword(""); // Limpiar el campo de confirmación
+        setConfirmPassword("");
         setName("");
-        console.log("SI");
       } else {
         const message = response?.data?.message || "Error desconocido";
         setError(message);

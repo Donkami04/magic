@@ -3,18 +3,54 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { ShoppingCartContext } from "../../Context/ShoppingCart";
 import { AuthContext } from "../../Context/Auth"; // Asegúrate de importar tu AuthContext
 import { RiAdminFill } from "react-icons/ri";
+import { useAuth } from "../../Context/Auth";
+import { IoLogOut } from "react-icons/io5";
+import { IoMdHome } from "react-icons/io";
+import { HiMiniShoppingBag } from "react-icons/hi2";
+import { HiMenuAlt3 } from "react-icons/hi";
+import { Register } from "../../Pages/Register";
+import { Login } from "../../Pages/Login";
+import { useShoppingContext } from "../../Context/ShoppingCart";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
-  const { user } = useContext(AuthContext); // Obtén el estado del usuario
   const context = useContext(ShoppingCartContext);
-  const showSellerOptions = !!user; // true si hay un usuario autenticado
+  const { user, logout } = useAuth();
+  const [rol, setRol] = useState(null);
+  const [showSellerOptions, setShowSellerOptions] = useState(null);
+  const [classNavSeller, setClassNavSeller] = useState("w-20");
+  const [openRegisterForm, setOpenRegisterForm] = useState(true);
+  const {
+    registerForm,
+    setRegisterForm,
+    loginForm,
+    setLoginForm,
+    setNewProductForm,
+    NewProductForm,
+  } = useShoppingContext();
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (user) {
+          setRol(user.rol);
+          setShowSellerOptions(true);
+          setClassNavSeller("w-18");
+        } else {
+          setShowSellerOptions(false);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [user]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -35,109 +71,254 @@ export const Navbar = () => {
   }, [menuRef, buttonRef]);
 
   return (
-    <nav
-      className="h-20 flex justify-between items-center bg-black p-2 pr-2 text-white fixed top-0 left-0 w-full z-10"
-      aria-label="Main Navigation"
-    >
-      <h1 className="font-bold max-sm:text-2xl sm:text-3xl md:text-4xl lg:text-5xl ">
-        <NavLink to="/">
-          <span className="blue-magiclog">Market</span>
-          <span className="text-zinc-300">Place</span>
-        </NavLink>
-      </h1>
-
-      <div className="flex w-128 justify-between items-center max-md:w-80 max-md:justify-around max-sm:w-28">
-        <NavLink to="/" className="hover:text-cyan-400 max-sm:hidden">
-          Home
-        </NavLink>
-        <NavLink
-          to="/registrarse"
-          className="hover:text-cyan-400 max-sm:hidden"
-        >
-          Registrarse
-        </NavLink>
-        <NavLink to="/login" className="hover:text-cyan-400 max-sm:hidden">
-          Login
-        </NavLink>
-        {showSellerOptions && (
-          <NavLink
-            to="/dashboard"
-            className="hover:text-cyan-400 max-sm:hidden"
-          >
-            Dashboard
+    <>
+      {registerForm && <Register />}
+      {loginForm && <Login />}
+      {/* {loginForm && <NewProduct />} */}
+      <nav className="h-20 flex justify-between items-center bg-black p-2 pr-2 text-white fixed top-0 left-0 w-full z-10">
+        <h1 className="font-bold max-sm:text-2xl sm:text-3xl md:text-4xl lg:text-5xl ">
+          <NavLink to="/">
+            <span className="blue-magiclog">Market</span>
+            <span className="text-zinc-300">Place</span>
           </NavLink>
-        )}
-        <div>
-          <figure>
-            <img src="/bag.svg" alt="" className="w-10 h-10" />
-          </figure>
-          <p className="grid place-content-center text-sm absolute top-6 bg-red-500 rounded-full size-4">
-            {context.countItems}
-          </p>
-        </div>
-        <button
-          ref={buttonRef}
-          className="sm:hidden flex items-center"
-          onClick={toggleMenu}
-          aria-label="Toggle Menu"
-        >
-          <img
-            className="fill-current text-cyan-500 w-10 h-10"
-            src="/slide-menu.svg"
-          />
-        </button>
-      </div>
+        </h1>
 
-      {isMenuOpen && (
-        <aside
-          ref={menuRef}
-          className={`fixed top-20 right-0 h-screen w-56 bg-black transform transition-transform duration-300 ease-in-out ${
-            isMenuOpen ? "translate-x-0" : "translate-x-full"
-          } sm:hidden`}
+        <div
+          className={`flex justify-between items-center sm:w-80 md:justify-evenly`}
         >
-          <div className="pt-[20px] flex flex-col gap-4 h-[30%]">
+          {!showSellerOptions && (
             <NavLink
-              onClick={toggleMenu}
+              onClick={() => {
+                setRegisterForm(false);
+                setLoginForm(false);
+              }}
               to="/"
-              className="flex justify-evenly hover:text-cyan-400"
-              end
+              className="hover:blue-magiclog max-sm:hidden"
             >
-              <img className="fill-current w-6 h-6" src="/home.svg" />
-              <span className="grid place-items-center w-[40%]">Home</span>
+              Home
             </NavLink>
+          )}
+          {!showSellerOptions && (
             <NavLink
-              onClick={toggleMenu}
-              to="/registrarse"
-              className="flex justify-evenly relative hover:text-cyan-400"
+              onClick={() => {
+                setRegisterForm(true);
+                setLoginForm(false);
+              }}
+              to=""
+              className="hover:blue-magiclog max-sm:hidden"
             >
-              <img className="fill-current w-6 h-6" src="/login.svg" />
-              <span className="grid place-items-center w-[40%]">
-                Registrarse
-              </span>
+              Registrarse
             </NavLink>
+          )}
+          {user && user.rol === "admin" ? (
             <NavLink
-              onClick={toggleMenu}
-              to="/login"
-              className="flex justify-evenly relative hover:text-cyan-400"
+              onClick={() => {
+                setRegisterForm(false);
+                setLoginForm(false);
+              }}
+              className="hover:text-sky-500 max-sm:hidden"
+              to={"/admin"}
             >
-              <img className="fill-current w-6 h-6" src="/register.svg" />
-              <span className="grid place-items-center w-[40%]">Login</span>
+              Admin
             </NavLink>
-            {showSellerOptions && (
+          ) : (
+            ""
+          )}
+
+          {user && user.rol === "vendedor" ? (
+            <NavLink
+              onClick={() => {
+                setRegisterForm(false);
+                setLoginForm(false);
+              }}
+              className="max-sm:hidden"
+              to={"/dashboard"}
+            >
+              Dashboard
+            </NavLink>
+          ) : (
+            ""
+          )}
+
+          {showSellerOptions ? (
+            <NavLink
+              onClick={() => logout()}
+              to=""
+              className="hover:blue-magiclog max-sm:hidden"
+            >
+              Logout
+            </NavLink>
+          ) : (
+            <NavLink
+              onClick={() => {
+                setLoginForm(true);
+                setRegisterForm(false);
+              }}
+              to=""
+              className="hover:blue-magiclog max-sm:hidden"
+            >
+              Login
+            </NavLink>
+          )}
+
+          {!showSellerOptions && (
+            <div>
+              <figure>
+                <HiMiniShoppingBag size="2.2rem" color={"#13AFEF"} />
+              </figure>
+
+              <p className="grid place-content-center text-sm absolute top-6 bg-red-500 rounded-full size-4">
+                {context.countItems}
+              </p>
+            </div>
+          )}
+          <button
+            ref={buttonRef}
+            className="sm:hidden flex items-center"
+            onClick={() => {
+              toggleMenu();
+              setRegisterForm(false);
+              setLoginForm(false);
+            }}
+            aria-label="Toggle Menu"
+          >
+            <HiMenuAlt3 size="2.2rem" color={"#13AFEF"} />
+          </button>
+        </div>
+
+        {isMenuOpen && (
+          <aside
+            ref={menuRef}
+            className={`border-l items-center border-sky-500 z-50 fixed top-20 right-0 h-screen w-56 bg-black ${
+              isMenuOpen ? "translate-x-0" : "translate-x-full"
+            } sm:hidden`}
+          >
+            <div className="pt-[20px] flex flex-col gap-4 h-[30%]">
+              {!showSellerOptions && (
+                <NavLink
+                  onClick={toggleMenu}
+                  to="/"
+                  className="  flex justify-evenly blue-magiclog"
+                  end
+                >
+                  <IoMdHome color="bg-blue-magiclog" size="1.8rem" />
+                  <span className="grid place-items-center w-[40%]">Home</span>
+                </NavLink>
+              )}
+              {!showSellerOptions && (
+                <NavLink
+                  onClick={() => {
+                    toggleMenu();
+                    setRegisterForm(!registerForm);
+                    setLoginForm(false);
+                  }}
+                  to=""
+                  className="flex justify-evenly relative blue-magiclog"
+                >
+                  <img className="fill-current w-6 h-6" src="/login.svg" />
+                  <span className="grid place-items-center w-[40%]">
+                    Registrarse
+                  </span>
+                </NavLink>
+              )}
+              {/* {user && user.rol === "admin" ? (
               <NavLink
-                onClick={toggleMenu}
-                to="/dashboard"
-                className="flex justify-evenly relative hover:text-cyan-400"
+                className="hover:text-sky-500 max-sm:hidden"
+                to={"/admin"}
               >
-                <RiAdminFill color={"#22d3ee"} size="1.4rem" />
-                <span className="grid place-items-center w-[40%]">
-                  Dashboard
-                </span>
+                Admin
               </NavLink>
+            ) : (
+              ""
             )}
-          </div>
-        </aside>
-      )}
-    </nav>
+            {user && user.rol === "vendedor" ? (
+              <NavLink
+                className="hover:text-sky-500 max-sm:hidden"
+                to={"/dashboard"}
+              >
+                Dashboard
+              </NavLink>
+            ) : (
+              ""
+            )} */}
+              {/* {!user && (
+              <NavLink
+                className="hover:text-sky-500 max-sm:hidden"
+                to={"/admin"}
+              >
+                Dashboard
+              </NavLink>
+            )} 
+              <NavLink className="max-sm:hidden" to={"/dashboard"}>
+                Dashboard
+              </NavLink> */}
+
+              {user && user.rol === "vendedor" ? (
+                <NavLink
+                  onClick={() => {
+                    toggleMenu();
+                    setLoginForm(false);
+                    setRegisterForm(false);
+                  }}
+                  to="/dashboard"
+                  className="flex justify-evenly relative blue-magiclog"
+                >
+                  <RiAdminFill color={"#13AFEF"} size="1.8rem" />
+                  <span className="grid place-items-center w-[40%]">
+                    Dashboard
+                  </span>
+                </NavLink>
+              ) : (
+                ""
+              )}
+              {user && user.rol === "admin" ? (
+                <NavLink
+                  onClick={() => {
+                    toggleMenu();
+                    setLoginForm(false);
+                    setRegisterForm(false);
+                  }}
+                  to="/admin"
+                  className="flex justify-evenly relative blue-magiclog"
+                >
+                  <RiAdminFill color={"#13AFEF"} size="1.8rem" />
+                  <span className="grid place-items-center w-[40%]">Admin</span>
+                </NavLink>
+              ) : (
+                ""
+              )}
+              {showSellerOptions ? (
+                <NavLink
+                  onClick={() => {
+                    toggleMenu(); // Ejecuta toggleMenu
+                    logout(); // Ejecuta logout
+                  }}
+                  to=""
+                  className="flex justify-evenly relative blue-magiclog"
+                >
+                  <IoLogOut color={"#13AFEF"} size="1.8rem" />
+                  <span className="grid place-items-center w-[40%]">
+                    Logout
+                  </span>
+                </NavLink>
+              ) : (
+                <NavLink
+                  onClick={() => {
+                    setLoginForm(!loginForm);
+                    setRegisterForm(false);
+                    setIsMenuOpen(false);
+                  }}
+                  to=""
+                  className="flex justify-evenly relative blue-magiclog"
+                >
+                  <IoLogOut color={"#13AFEF"} size="1.8rem" />
+                  <span className="grid place-items-center w-[40%]">Login</span>
+                </NavLink>
+              )}
+            </div>
+          </aside>
+        )}
+      </nav>
+    </>
   );
 };

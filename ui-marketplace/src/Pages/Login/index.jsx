@@ -1,8 +1,12 @@
-import React, { useState, useContext, useEffect } from "react";
+// React Importaciones
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ContentForm } from "../../Components/ContentForm";
+
+// Contexts
 import { useAuth } from "../../Context/Auth";
-import { useShoppingContext } from "../../Context/ShoppingCart";
+
+// Componentes
+import { ContentForm } from "../../Components/ContentForm";
 import { Loading } from "../../Components/Loading";
 
 export const Login = () => {
@@ -11,7 +15,6 @@ export const Login = () => {
 
   const navigate = useNavigate();
   const { user, login, loading, setLoading } = useAuth();
-  const { loginForm, setLoginForm } = useShoppingContext();
   const { error, setError } = useAuth();
 
   useEffect(() => {
@@ -19,14 +22,12 @@ export const Login = () => {
       if (user && user.rol === "vendedor") {
         console.log(user.rol);
         navigate("/dashboard");
-        setLoading(false);
-        // setLoginForm(false);
+        // setLoading(false);
       }
       if (user && user.rol === "admin") {
         console.log("admin");
         navigate("/admin");
-        setLoading(false);
-        // setLoginForm(false);
+        // setLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -36,15 +37,20 @@ export const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password) {
-      setError("Todos los campos son obligatorios");
-      return;
-    }
-    setError("");
-    const response = await login(email, password); // Cambié `e` por `email` y `password`
-    console.log(response);
-    if (response && response.statusCode !== 200) {
-      setError(response.message); // Configurando el error en caso de que no sea 200
+    try {
+      if (!email || !password) {
+        setError("Todos los campos son obligatorios");
+        return;
+      }
+
+      const response = await login(email, password);
+      if (response && response.statusCode !== 200) {
+        setError(response.message);
+      } else {
+        setError(null);
+      }
+    } catch (error) {
+      setError(error.message);
     }
   };
 
@@ -64,7 +70,6 @@ export const Login = () => {
           id="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          // required
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
         />
       </div>
@@ -80,7 +85,6 @@ export const Login = () => {
           id="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          // required
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
         />
       </div>

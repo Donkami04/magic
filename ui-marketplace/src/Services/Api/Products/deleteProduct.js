@@ -11,7 +11,7 @@ export const deleteProduct = async (token, productId) => {
         Authorization: `Bearer ${token}`
       }
     })
-    .then((response) => response.statusCode)
+    .then((response) => response.data)
     .catch((error) => {
       console.error(error);
       throw new Error(error.message);

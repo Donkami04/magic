@@ -1,13 +1,12 @@
 import { useNavigate } from "react-router-dom"; // Asegúrate de tener el hook de navegación si lo necesitas
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
-
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true); // Estado de carga
-
+  const [error, setError] = useState(null);
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("jwtToken");
@@ -21,10 +20,8 @@ export const AuthProvider = ({ children }) => {
               },
             }
           );
-          console.log(response);
-          if (response.statusCode === 200) {
-            setUser({ token, ...response.data });
-            console.log(`Desde el aut ${response.data}`);
+          if (response.status === 200) {
+            setUser({ token, ...response.data.data });
           } else {
             // localStorage.removeItem("jwtToken");
             setUser(null);
@@ -54,25 +51,30 @@ export const AuthProvider = ({ children }) => {
           message: "El password debe tener al menos 8 caracteres",
         };
       }
+      setLoading(true);
       const response = await axios.post(
         "http://localhost:3000/api/v1/marketplace/auth/login",
         { email, password }
       );
-
+      console.log(response);
       const statusCode = response?.status;
       if (statusCode === 200) {
         const token = response.data.data.token;
         localStorage.setItem("jwtToken", token);
-        setUser({ token, ...response.data.userData });
+        setUser({ token, ...response.data.data.user });
         return { statusCode };
       } else {
         const message = response.data.message;
+        setLoading(false);
         return { statusCode, message };
       }
     } catch (error) {
-      const statusCode = error.response?.status || 500; // Manejar error sin status
+      const statusCode = error.response?.status || 500;
       const message = error.response?.data.message || "Error en el servidor.";
-      return { statusCode, message };
+      setError(message); // Configurando el mensaje de error
+      return { statusCode, message }; // Retornando el mensaje
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -88,6 +90,9 @@ export const AuthProvider = ({ children }) => {
         loading, // Proporcionar el estado de carga
         login,
         logout,
+        setLoading,
+        error,
+        setError,
       }}
     >
       {children}

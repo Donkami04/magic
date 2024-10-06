@@ -1,27 +1,15 @@
-// React Importaciones
-import { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-
-// Contexts
-import { useShoppingContext } from "../../Context/ShoppingCart";
-import { useAuth } from "../../Context/Auth";
-
-// Dependencias
 import axios from "axios";
-
-// Llamados a la API
-import { getProductsBySeller } from "../../Services/Api/Products/sellerProducts";
-import { deleteProduct } from "../../Services/Api/Products/deleteProduct";
-
-// Componentes
+import { IoIosAdd, IoMdCloseCircle } from "react-icons/io";
 import { Card } from "../../Components/Card";
 import { Loading } from "../../Components/Loading";
 import { ErrorOverlay } from "../../Components/ErrorOverlay";
+import { useAuth } from "../../Context/Auth";
+import { useShoppingContext } from "../../Context/ShoppingCart";
+import { getProductsBySeller } from "../../Services/Api/Products/sellerProducts";
+import { deleteProduct } from "../../Services/Api/Products/deleteProduct";
 import { NewProductForm } from "../../Components/NewProductForm";
-import { ConfirmationModal } from "../../Components/ConfirmationModal";
-
-// Iconos
-import { IoIosAdd } from "react-icons/io";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -39,16 +27,12 @@ export const Dashboard = () => {
     quantity: "",
   });
 
-  // Estado para el modal de confirmación
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [productToDelete, setProductToDelete] = useState(null);
-
   useEffect(() => {
     setLoginForm(false);
     if (!user) {
       navigate("/");
     }
-  }, [user]);
+  }, [user, navigate, setLoginForm]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -70,45 +54,28 @@ export const Dashboard = () => {
       }
     };
     fetchProducts();
-  }, [user]);
+  }, [user, formatPrice, setLoading]);
 
   const handleSubmitDelete = async (productId) => {
     setLoading(true);
     try {
       const response = await deleteProduct(user.token, productId);
-
-      if (response?.statusCode === 200) {
+      if (response?.statusCode !== 200) {
+        setError("Error al eliminar el producto");
+      } else {
         const newProducts = await getProductsBySeller(user.token);
-
-        const modifiedData = newProducts.data.map((product) => ({
+        const modifiedData = newProducts.map((product) => ({
           ...product,
           formattedPrice: formatPrice(product.price),
         }));
-
         setProducts(modifiedData);
         setFilteredProducts(modifiedData);
-        setError(null);
-      } else {
-        setError("Error: Product deletion was not successful.");
       }
     } catch (error) {
-      console.error("Error deleting product:", error.message);
       setError(error.message);
     } finally {
       setLoading(false);
     }
-  };
-  const handleConfirmDelete = () => {
-    if (productToDelete) {
-      handleSubmitDelete(productToDelete);
-      setProductToDelete(null);
-    }
-    setIsModalVisible(false);
-  };
-
-  const openDeleteModal = (productId) => {
-    setProductToDelete(productId);
-    setIsModalVisible(true);
   };
 
   const handleSubmit = async (e) => {
@@ -183,7 +150,7 @@ export const Dashboard = () => {
                 >
                   <Card
                     product={product}
-                    handleSubmitDelete={openDeleteModal}
+                    handleSubmitDelete={handleSubmitDelete}
                   />
                   <div className="border-b border-zinc-800"></div>
                 </div>
@@ -191,7 +158,8 @@ export const Dashboard = () => {
             ) : (
               <div className="text-white font-bold border-b border-white h-40 pl-5 pr-5 inset-0 flex items-center justify-center max-sm:relative">
                 <p className="h-92 text-center">
-                  No tienes productos registrados hasta el momento{" "}
+                  No se encontraron productos{" "}
+                  <span className="text-2xl">😭</span>
                 </p>
               </div>
             )}
@@ -204,11 +172,6 @@ export const Dashboard = () => {
           <IoIosAdd size="3rem" color="white" />
         </button>
       </main>
-      <ConfirmationModal
-        isVisible={isModalVisible}
-        onClose={() => setIsModalVisible(false)}
-        onConfirm={handleConfirmDelete}
-      />
     </>
   );
 };

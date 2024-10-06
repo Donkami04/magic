@@ -1,35 +1,30 @@
+// React Importaciones
 import { NavLink } from "react-router-dom";
 import { useState, useRef, useEffect, useContext } from "react";
-import { ShoppingCartContext } from "../../Context/ShoppingCart";
-import { AuthContext } from "../../Context/Auth"; // Asegúrate de importar tu AuthContext
+
+// Contexts
+import { useShoppingContext } from "../../Context/ShoppingCart";
+
+// Componentes
+import { Register } from "../../Pages/Register";
+import { Login } from "../../Pages/Login";
+
+// Iconos
 import { RiAdminFill } from "react-icons/ri";
 import { useAuth } from "../../Context/Auth";
 import { IoLogOut } from "react-icons/io5";
 import { IoMdHome } from "react-icons/io";
 import { HiMiniShoppingBag } from "react-icons/hi2";
 import { HiMenuAlt3 } from "react-icons/hi";
-import { Register } from "../../Pages/Register";
-import { Login } from "../../Pages/Login";
-import { useShoppingContext } from "../../Context/ShoppingCart";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showSellerOptions, setShowSellerOptions] = useState(null);
+  const { user, logout } = useAuth();
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
-  const context = useContext(ShoppingCartContext);
-  const { user, logout } = useAuth();
-  const [rol, setRol] = useState(null);
-  const [showSellerOptions, setShowSellerOptions] = useState(null);
-  const [classNavSeller, setClassNavSeller] = useState("w-20");
-  const [openRegisterForm, setOpenRegisterForm] = useState(true);
-  const {
-    registerForm,
-    setRegisterForm,
-    loginForm,
-    setLoginForm,
-    setNewProductForm,
-    NewProductForm,
-  } = useShoppingContext();
+  const { registerForm, setRegisterForm, loginForm, setLoginForm, countItems } =
+    useShoppingContext();
 
   const toggleMenu = () => {
     setIsMenuOpen((prev) => !prev);
@@ -39,9 +34,7 @@ export const Navbar = () => {
     const fetchData = async () => {
       try {
         if (user) {
-          setRol(user.rol);
           setShowSellerOptions(true);
-          setClassNavSeller("w-18");
         } else {
           setShowSellerOptions(false);
         }
@@ -52,6 +45,8 @@ export const Navbar = () => {
     fetchData();
   }, [user]);
 
+  // Se emplea para cerrar el menu mobile cuando
+  // se hace click fuera de este
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -63,7 +58,6 @@ export const Navbar = () => {
         setIsMenuOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -168,7 +162,7 @@ export const Navbar = () => {
               </figure>
 
               <p className="grid place-content-center text-sm absolute top-6 bg-red-500 rounded-full size-4">
-                {context.countItems}
+                {countItems}
               </p>
             </div>
           )}
@@ -221,38 +215,6 @@ export const Navbar = () => {
                   </span>
                 </NavLink>
               )}
-              {/* {user && user.rol === "admin" ? (
-              <NavLink
-                className="hover:text-sky-500 max-sm:hidden"
-                to={"/admin"}
-              >
-                Admin
-              </NavLink>
-            ) : (
-              ""
-            )}
-            {user && user.rol === "vendedor" ? (
-              <NavLink
-                className="hover:text-sky-500 max-sm:hidden"
-                to={"/dashboard"}
-              >
-                Dashboard
-              </NavLink>
-            ) : (
-              ""
-            )} */}
-              {/* {!user && (
-              <NavLink
-                className="hover:text-sky-500 max-sm:hidden"
-                to={"/admin"}
-              >
-                Dashboard
-              </NavLink>
-            )} 
-              <NavLink className="max-sm:hidden" to={"/dashboard"}>
-                Dashboard
-              </NavLink> */}
-
               {user && user.rol === "vendedor" ? (
                 <NavLink
                   onClick={() => {

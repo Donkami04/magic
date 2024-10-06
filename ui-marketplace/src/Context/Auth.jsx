@@ -1,106 +1,104 @@
-import { useNavigate } from "react-router-dom"; // Asegúrate de tener el hook de navegación si lo necesitas
+// React Importaciones
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
+
+// Definición de constantes
+const API_BASE_URL = "http://localhost:3000/api/v1/marketplace";
+const TOKEN_KEY = "jwtToken";
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // Estado de carga
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  // Verificamos si hay un token en el localstorage
   useEffect(() => {
     const fetchUser = async () => {
-      const token = localStorage.getItem("jwtToken");
+      const token = localStorage.getItem(TOKEN_KEY);
       if (token) {
         try {
-          const response = await axios.get(
-            "http://localhost:3000/api/v1/marketplace/auth/decode/jwt",
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+          const response = await axios.get(`${API_BASE_URL}/auth/decode/jwt`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
           if (response.status === 200) {
             setUser({ token, ...response.data.data });
           } else {
-            // localStorage.removeItem("jwtToken");
             setUser(null);
           }
         } catch (error) {
           console.error("Error al obtener el usuario:", error);
-          // Aquí puedes manejar el error si es necesario
+          setError("No se pudo obtener la información del usuario");
         }
       }
-      setLoading(false); // Cambiar estado de carga a false al final
+      setLoading(false);
     };
 
     fetchUser();
   }, []);
 
+  // Función de inicio de sesión
   const login = async (email, password) => {
+    // if (!email || !password) {
+    //   return {
+    //     statusCode: 400,
+    //     message: "El email y la contraseña son requeridos",
+    //   };
+    // }
+    // if (password.length < 8) {
+    //   return {
+    //     statusCode: 400,
+    //     message: "La contraseña debe tener al menos 8 caracteres",
+    //   };
+    // }
+
+    // setLoading(true);
     try {
-      if (!email || !password) {
-        return {
-          statusCode: 400,
-          message: "El Email y el password son requeridos",
-        };
-      }
-      if (password.length < 8) {
-        return {
-          statusCode: 400,
-          message: "El password debe tener al menos 8 caracteres",
-        };
-      }
-      setLoading(true);
-      const response = await axios.post(
-        "http://localhost:3000/api/v1/marketplace/auth/login",
-        { email, password }
-      );
-      console.log(response);
-      const statusCode = response?.status;
-      if (statusCode === 200) {
-        const token = response.data.data.token;
-        localStorage.setItem("jwtToken", token);
-        setUser({ token, ...response.data.data.user });
-        return { statusCode };
+      const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+        email,
+        password,
+      });
+      const { status, data } = response;
+
+      if (status === 200) {
+        const { token, user: userData } = data.data;
+        localStorage.setItem(TOKEN_KEY, token);
+        setUser({ token, ...userData });
+        return { statusCode: status };
       } else {
-        const message = response.data.message;
-        setLoading(false);
-        return { statusCode, message };
+        return { statusCode: status, message: data.message };
       }
     } catch (error) {
       const statusCode = error.response?.status || 500;
-      const message = error.response?.data.message || "Error en el servidor.";
-      setError(message); // Configurando el mensaje de error
-      return { statusCode, message }; // Retornando el mensaje
+      const message = error.response?.data.message || "Error en el servidor";
+      setError(message);
+      return { statusCode, message };
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
+  // Función de cierre de sesión
   const logout = () => {
-    localStorage.removeItem("jwtToken");
+    localStorage.removeItem(TOKEN_KEY);
     setUser(null);
   };
 
+  const contextValue = {
+    user,
+    loading,
+    login,
+    logout,
+    setLoading,
+    error,
+    setError,
+  };
+
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        loading, // Proporcionar el estado de carga
-        login,
-        logout,
-        setLoading,
-        error,
-        setError,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
 
-// Hook personalizado para usar el contexto de autenticación
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+// Hook personalizado para usar el context de autenticación
+export const useAuth = () => useContext(AuthContext);

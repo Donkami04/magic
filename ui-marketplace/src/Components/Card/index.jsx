@@ -1,11 +1,13 @@
+// React Importaciones
 import { useContext, useEffect, useState } from "react";
-import { PlusIcon } from "@heroicons/react/24/solid";
-import { ShoppingCartContext } from "../../Context/ShoppingCart";
 import { useLocation } from "react-router-dom";
+
+// Contexts
+import { ShoppingCartContext } from "../../Context/ShoppingCart";
+
+// Iconos
 import { MdEdit } from "react-icons/md";
 import { FaTrash } from "react-icons/fa";
-import { createProduct } from "../../Services/Api/Products/createProduct";
-import { deleteProduct } from "../../Services/Api/Products/deleteProduct";
 
 export const Card = ({ product, handleSubmitDelete }) => {
   const [adminButtons, setAdminButtons] = useState(null);
@@ -53,9 +55,6 @@ export const Card = ({ product, handleSubmitDelete }) => {
         )}
         {!noButtons && adminButtons && (
           <div className=" max-sm:ml-2 flex w-32 md:h-8 items-center justify-evenly">
-            <div className="w-7 h-7 cursor-pointer bg-zinc-600 grid place-content-center rounded-2xl">
-              <MdEdit size="1.4rem" />
-            </div>
             <div className="w-7 h-7 cursor-pointer bg-blue-magiclog grid place-content-center rounded-2xl">
               <FaTrash onClick={() => handleSubmitDelete(product.product_id)} />
             </div>
