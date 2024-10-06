@@ -3,11 +3,12 @@ module.exports = {
   theme: {
     extend: {
       width: {
-        '128': '32rem', // Añadir un nuevo valor, por ejemplo, w-128 (equivalente a 512px)
+        128: "32rem", // Añadir un nuevo valor, por ejemplo, w-128 (equivalente a 512px)
       },
       height: {
         // Define un custom height que puedes usar en tus componentes
         heighWithOutNav: "calc(100vh - 5rem)",
+        128: "32rem"
       },
       keyframes: {
         glow: {
@@ -19,10 +20,17 @@ module.exports = {
           "50%": { transform: "translateX(10px)" },
           "100%": { transform: "translateX(0)" },
         },
+        shake: {
+          "0%, 100%": { transform: "translateX(0)" },
+          "25%": { transform: "translateX(-5px)" },
+          "50%": { transform: "translateX(5px)" },
+          "75%": { transform: "translateX(-5px)" },
+        },
       },
       animation: {
         glow: "glow 1.5s ease-in-out infinite",
         move: "move 2s ease-in-out infinite",
+        shake: "shake 0.5s ease-in-out 1",
       },
     },
   },

@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const SECRET = process.env.JWT_SECRET;
 
 async function loginUser(email, password) {
-  console.log(email, password);
   try {
     if (!email || !password)
       return { statusCode: 400, message: "Email y password requeridos" };
@@ -23,6 +22,7 @@ async function loginUser(email, password) {
       };
     }
     delete user.dataValues.password;
+    console.log(user);
     return { statusCode: 200, message: "Ok", data: user };
   } catch (error) {
     // console.error(error);

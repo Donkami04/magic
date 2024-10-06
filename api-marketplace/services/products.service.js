@@ -67,7 +67,7 @@ class ProductService {
       const newProduct = await Product.create({
         name: data.name.toLowerCase(),
         sku: data.sku.toLowerCase(),
-        quantity: data.quantity,
+        quantity: data.quantity || 0,
         price: data.price,
         user_id: userData.user_id, // Asignar el user_id proporcionado
       });

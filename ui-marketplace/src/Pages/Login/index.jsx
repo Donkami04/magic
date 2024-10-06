@@ -1,26 +1,42 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/Auth"; // Ajusta la ruta según tu estructura de archivos
 import { ContentForm } from "../../Components/ContentForm";
+import { useAuth } from "../../Context/Auth";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const context = useContext(AuthContext);
+  const { user, login, loading, setLoading } = useAuth();
+
+  useEffect(() => {
+    console.log(user);
+    if (user && user.rol === "admin") {
+      navigate("/admin");
+    } else if (user && user.rol === "vendedor") {
+      navigate("/dashboard");
+    }
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     try {
-      const response = await context.login(email, password);
+      const response = await login(email, password);
 
-      if (response.statusCode === 200) {
-        navigate("/");
-      } else {
-        setError(response.message);
-      }
+      // console.log("Desde login");
+      // console.log(user);
+      // if (user && response.statusCode === 200 && user.rol === "vendedor") {
+      //   navigate("/dashboard");
+      //   setLoading(false);
+      // } else if (user && response.statusCode === 200 && user.rol === "admin") {
+      //   navigate("/admin");
+      //   setLoading(false);
+      // } else {
+      //   setError(response.message);
+      // }
     } catch (error) {
       console.error("Error de login:", error);
       // setError(error.message);
@@ -28,7 +44,7 @@ export const Login = () => {
   };
 
   return (
-    <ContentForm title={"Iniciar Sesión"} handleSubmit={handleSubmit}>
+    <ContentForm title={"Iniciar Sesión"}>
       {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
       <div className="mb-4">
         <label htmlFor="email" className="block text-sm font-medium text-white">
