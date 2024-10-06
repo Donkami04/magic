@@ -174,7 +174,7 @@ export const Dashboard = () => {
         />
       )}
       <main className="h-heighWithOutNav absolute top-20 overflow-auto grid w-full pl-[10%] pr-[10%] bg-radial-custom max-sm:p-0">
-        <div className="mt-5 ml-auto mr-auto flex max-sm:flex-col">
+        <div className="mt-5 flex max-sm:flex-col">
           <aside className="h-96 flex flex-col justify-evenly items-center text-white w-72 bg-transparent max-sm:hidden mt-5">
             <button
               onClick={() => setNewProdForm(true)}

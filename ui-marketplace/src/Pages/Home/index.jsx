@@ -148,7 +148,7 @@ export const Home = () => {
 
   return (
     <main className="h-heighWithOutNav absolute top-20 overflow-auto grid w-full pl-[10%] pr-[10%] bg-radial-custom max-sm:p-0">
-      <div className="mt-5 ml-auto mr-auto flex max-md:flex-col">
+      <div className="mt-5 flex max-md:flex-col">
         {/* Filters for larger screens */}
         <aside className="text-white w-72 bg-transparent max-md:hidden mt-5">
           <form className="flex flex-col items-center" onSubmit={handleSubmit}>

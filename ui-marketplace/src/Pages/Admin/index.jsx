@@ -141,7 +141,7 @@ export const Admin = () => {
 
   return (
     <main className="h-heighWithOutNav absolute max-sm:top-26 top-20 overflow-auto grid w-full pl-[10%] pr-[10%] bg-radial-custom max-sm:p-0">
-      <div className=" ml-auto mr-auto flex max-md:flex-col">
+      <div className="flex max-md:flex-col">
         <aside className="flex flex-col items-center w-full md:w-auto md:mt-0 mt-5">
           <SelectUser
             usersList={usersList}

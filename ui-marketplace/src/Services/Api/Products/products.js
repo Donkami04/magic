@@ -30,3 +30,5 @@ export const getProducts = async (name = '', price = '', sku = '') => {
       throw new Error("Error al obtener la lista de productos desde el servidor");
     });
 };
+
+console.log(`${BASE_API_URL}/products/filter`);
