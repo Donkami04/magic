@@ -25,18 +25,18 @@ services:
       - postgres
 
   backend-api-rest:
+    container_name: api-marketplace
     build:
-      context: Backend
+      context: api-marketplace
     ports:
-      - '3001:3001'
+      - '3000:3000'
     restart: always
-    environment:
-      - NODE_ENV=production
-  #   # command: sh -c "npx sequelize-cli db:migrate && node index.js"
+
       
   frontend-react:
+    container_name: ui-marketplace
     build:
-      context: Front
+      context: ui-marketplace
     ports:
       - '4000:80'
     restart: always
