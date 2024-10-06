@@ -1,8 +1,5 @@
 import axios from "axios";
-
-// const ENVIRONMENT = import.meta.env.ENVIRONMENT || "local";
-
-export const BASE_API_URL = `http://localhost:3000/api/v1/marketplace`;
+import { BASE_API_URL } from "../index";
 
 export const getProducts = async (name = '', price = '', sku = '') => {
   // Crear un array para almacenar los parámetros de consulta
