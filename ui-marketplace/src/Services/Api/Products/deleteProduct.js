@@ -1,5 +1,12 @@
 import axios from "axios";
-import { BASE_API_URL } from "../index";
+// const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT || "local";
+
+let base_url = "https://magic-log.onrender.com"
+// if (ENVIRONMENT === "production") {
+//   base_url = "https://magic-log.onrender.com"
+// }
+
+export const BASE_API_URL = `http://${base_url}/api/v1/marketplace`;
 
 export const deleteProduct = async (token, productId) => {
   return axios
