@@ -1,14 +1,12 @@
 import { useNavigate } from "react-router-dom"; // Asegúrate de tener el hook de navegación si lo necesitas
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
-
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true); // Estado de carga
   const [error, setError] = useState(null);
-
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("jwtToken");
@@ -71,10 +69,10 @@ export const AuthProvider = ({ children }) => {
         return { statusCode, message };
       }
     } catch (error) {
-      // const statusCode = error.response?.status || 500; // Manejar error sin status
-      // const message = error.response?.data.message || "Error en el servidor.";
-      // setError(error.response.data.message);
-      console.log(error);
+      const statusCode = error.response?.status || 500;
+      const message = error.response?.data.message || "Error en el servidor.";
+      setError(message); // Configurando el mensaje de error
+      return { statusCode, message }; // Retornando el mensaje
     } finally {
       setLoading(false);
     }

@@ -22,7 +22,6 @@ async function loginUser(email, password) {
       };
     }
     delete user.dataValues.password;
-    console.log(user);
     return { statusCode: 200, message: "Ok", data: user };
   } catch (error) {
     // console.error(error);

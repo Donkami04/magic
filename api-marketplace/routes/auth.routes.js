@@ -17,6 +17,7 @@ router.post(
   async (req, res, next) => {
     try {
       const user = req.user;
+
       if (user.statusCode === 401) {
         res.status(user.statusCode).json({
           statusCode: user.statusCode,

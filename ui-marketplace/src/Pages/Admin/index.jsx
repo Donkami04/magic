@@ -12,19 +12,29 @@ import { getProducts } from "../../Services/Api/Products/products";
 import { useAuth } from "../../Context/Auth";
 import { useShoppingContext } from "../../Context/ShoppingCart";
 import { IoIosAdd } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
+import { FaSearch } from "react-icons/fa";
 
 export const Admin = () => {
   // State variables
+  const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [showFiltersMobile, setShowFiltersMobile] = useState(false);
   const [showMenuMobile, setShowMenuMobile] = useState(true);
-  const { formatPrice } = useShoppingContext();
+  const { formatPrice, setLoginForm } = useShoppingContext();
   const [usersList, setUsersList] = useState([]);
   const [selectedUser, setSelectedUser] = useState(""); // Estado para el usuario seleccionado
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const { user, loading, setLoading } = useAuth();
   const filtersRef = useRef(null);
+
+  useEffect(() => {
+    setLoginForm(false);
+    if (!user) {
+      navigate("/");
+    }
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -53,11 +63,6 @@ export const Admin = () => {
 
   const handleUserSelect = (e) => {
     setSelectedUser(e.target.value);
-  };
-
-  const handleUserSelectMobile = (e) => {
-    setSelectedUser(e.target.value);
-    handleRequest();
   };
 
   const handleRequest = async () => {
@@ -90,26 +95,29 @@ export const Admin = () => {
 
   return (
     <main className="h-heighWithOutNav absolute max-sm:top-26 top-20 overflow-auto grid w-full pl-[10%] pr-[10%] bg-radial-custom max-sm:p-0">
-      <div className="md:hidden mt-5 w-full grid place-content-center z-50 ">
+      {/* <div className="md:hidden mt-5 w-full grid place-content-center z-0 ">
         <select
           onChange={handleUserSelectMobile}
           value={selectedUser}
           className="w-52 scrollbar text-center select:ring-cyan-500 bg-gray-800 text-white p-2 rounded-md border-2 border-blue-500 focus:ring-2 focus:ring-blue-500"
+          required // Asegura que el usuario seleccione una opción válida
         >
-          <option value="">Filtrar por vendedores</option>
+          <option value="" disabled hidden>
+            Filtrar por vendedores
+          </option>
           {usersList.map((user) => (
             <option key={user.user_id} value={user.user_id}>
               {user.name.toUpperCase()}
             </option>
           ))}
         </select>
-      </div>
-      <div className="max-sm:mt-5 ml-auto mr-auto flex max-md:flex-col">
-        <aside className="h-20 flex flex-col items-center  bg-whiteitems-center text-white w-72 bg-transparent max-sm:hidden mt-5">
+      </div> */}
+      <div className=" ml-auto mr-auto flex max-md:flex-col">
+        <aside className="flex flex-col items-center w-full md:w-auto md:mt-0 mt-5">
           <select
             onChange={handleUserSelect}
             value={selectedUser}
-            className="max-md:hidden max-sm:absolute top-0 w-40 scrollbar text-center select:ring-cyan-500 bg-gray-800 text-white p-2 rounded-md border-2 border-blue-500 focus:ring-2 focus:ring-blue-500"
+            className="w-40 scrollbar text-center select:ring-cyan-500 bg-gray-800 text-white p-2 rounded-md border-2 border-blue-500 focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Vendedores</option>
             {usersList.map((user) => (
@@ -120,10 +128,10 @@ export const Admin = () => {
           </select>
           {selectedUser && (
             <button
-              className="max-md:hidden mt-4 p-2 bg-blue-magiclog text-white rounded"
+              className="mt-4 p-2 bg-blue-magiclog text-white rounded w-20 grid place-content-center"
               onClick={handleRequest}
             >
-              Obtener productos del vendedor
+              <FaSearch />
             </button>
           )}
         </aside>

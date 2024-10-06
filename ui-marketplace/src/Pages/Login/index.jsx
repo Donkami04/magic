@@ -1,47 +1,56 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../Context/Auth"; // Ajusta la ruta según tu estructura de archivos
 import { ContentForm } from "../../Components/ContentForm";
 import { useAuth } from "../../Context/Auth";
+import { useShoppingContext } from "../../Context/ShoppingCart";
+import { Loading } from "../../Components/Loading";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+
   const navigate = useNavigate();
   const { user, login, loading, setLoading } = useAuth();
+  const { loginForm, setLoginForm } = useShoppingContext();
+  const { error, setError } = useAuth();
 
   useEffect(() => {
-    console.log(user);
-    if (user && user.rol === "admin") {
-      navigate("/admin");
-    } else if (user && user.rol === "vendedor") {
-      navigate("/dashboard");
+    try {
+      if (user && user.rol === "vendedor") {
+        console.log(user.rol);
+        navigate("/dashboard");
+        setLoading(false);
+        // setLoginForm(false);
+      }
+      if (user && user.rol === "admin") {
+        console.log("admin");
+        navigate("/admin");
+        setLoading(false);
+        // setLoginForm(false);
+      }
+    } catch (error) {
+      console.log(error);
+      setError(error.response.data.message);
     }
   }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!email || !password) {
+      setError("Todos los campos son obligatorios");
+      return;
+    }
     setError("");
-    try {
-      const response = await login(email, password);
-
-      // console.log("Desde login");
-      // console.log(user);
-      // if (user && response.statusCode === 200 && user.rol === "vendedor") {
-      //   navigate("/dashboard");
-      //   setLoading(false);
-      // } else if (user && response.statusCode === 200 && user.rol === "admin") {
-      //   navigate("/admin");
-      //   setLoading(false);
-      // } else {
-      //   setError(response.message);
-      // }
-    } catch (error) {
-      console.error("Error de login:", error);
-      // setError(error.message);
+    const response = await login(email, password); // Cambié `e` por `email` y `password`
+    console.log(response);
+    if (response && response.statusCode !== 200) {
+      setError(response.message); // Configurando el error en caso de que no sea 200
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <ContentForm title={"Iniciar Sesión"}>

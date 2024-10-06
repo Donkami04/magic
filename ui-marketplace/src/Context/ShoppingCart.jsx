@@ -15,6 +15,13 @@ export const ShoppingCartProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [showError, setShowError] = useState(true);
   const token = localStorage.getItem("jwtToken");
+  const [registerForm, setRegisterForm] = useState(false);
+  const [loginForm, setLoginForm] = useState(false);
+  const [newProductForm, setNewProductForm] = useState(null);
+
+  // const closeOtherMenus = () => {
+
+  // }
 
   const formatPrice = (price) => {
     return (
@@ -107,6 +114,12 @@ export const ShoppingCartProvider = ({ children }) => {
         handleSubmitDelete,
         getDashboardProducts,
         sellerProducts,
+        setRegisterForm,
+        registerForm,
+        setLoginForm,
+        loginForm,
+        setNewProductForm,
+        newProductForm,
       }}
     >
       {children}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ContentForm } from "../../Components/ContentForm";
+import { useShoppingContext } from "../../Context/ShoppingCart";
 import axios from "axios";
 
 export const Register = () => {
@@ -11,6 +12,7 @@ export const Register = () => {
   const [success, setSuccess] = useState(null);
   const [colorEmailInput, setColorEmailInput] = useState("border-gray-300");
   const [shake, setShake] = useState(false);
+  const { registerForm, setRegisterForm, setLoginForm } = useShoppingContext();
 
   const validatePassword = (password) => {
     const minLength = 8;
@@ -63,11 +65,13 @@ export const Register = () => {
       const statusCode = response?.status || 500;
 
       if (statusCode === 201) {
+        setRegisterForm(false);
         setSuccess(response.data.message);
         setEmail("");
         setPassword("");
         setConfirmPassword(""); // Limpiar el campo de confirmación
         setName("");
+        console.log("SI");
       } else {
         const message = response?.data?.message || "Error desconocido";
         setError(message);
