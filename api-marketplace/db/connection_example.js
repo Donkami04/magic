@@ -1,14 +1,19 @@
-const fs = require('fs');
-const pg = require('pg');
-const url = require('url');
+const { config } = require("../config/config");
 
-const config = {
-    user: "avnadmin",
+module.exports = {
+  development: {
+    url: config.dbUrl,
+    dialect: "postgres",
+  },
+  production: {
+    username: "avnadmin",
     password: "AVNS_aunycxTV5QWYo08va_b",
+    database: "defaultdb",
     host: "pg-12255df1-marketplace-db.h.aivencloud.com",
     port: 18570,
-    database: "defaultdb",
-    ssl: {
+    dialect: "postgres",
+    dialectOptions: {
+      ssl: {
         rejectUnauthorized: true,
         ca: `-----BEGIN CERTIFICATE-----
 MIIEQTCCAqmgAwIBAgIUWcj/EOL7o38W4kuSpIerGq16l3IwDQYJKoZIhvcNAQEM
@@ -35,21 +40,7 @@ McViG0YKuHADQBKCi32YmATTvk4N58+KivxsDnJkViRCeM9FSwWfOyYcAX+l34zx
 6fla7olxhEkUEVNU+pKkoLtRPjq9UCdASph8YXb/q5b6sLTwY4lJMlkWiw34IwLM
 AeeGBFm3nLQqs7uyjv7eHXxLRNOnqWOknTp4wxwRp49YUN3eGg==
 -----END CERTIFICATE-----`,
+      },
     },
+  },
 };
-
-const client = new pg.Client(config);
-client.connect(function (err) {
-    if (err)
-        throw err;
-    client.query("SELECT VERSION()", [], function (err, result) {
-        if (err)
-            throw err;
-
-        console.log(result.rows[0].version);
-        client.end(function (err) {
-            if (err)
-                throw err;
-        });
-    });
-});
