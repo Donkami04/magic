@@ -44,6 +44,7 @@ export const Login = () => {
       }
 
       const response = await login(email, password);
+      console.log(response);
       if (response && response.statusCode !== 200) {
         setError(response.message);
       } else {

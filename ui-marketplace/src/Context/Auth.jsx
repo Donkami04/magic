@@ -9,7 +9,7 @@ let base_url = "";
 if (ENVIRONMENT === "production") {
   base_url = "https://magic-log.onrender.com";
 } else {
-  base_url = "http://3.218.40.246:3000";
+  base_url = "http://localhost:3000";
 }
 const API_BASE_URL = `${base_url}/api/v1/marketplace`;
 const TOKEN_KEY = "jwtToken";

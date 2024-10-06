@@ -154,9 +154,6 @@ export const Admin = () => {
           <ProductList products={filteredProducts} />
         </div>
       </div>
-      <button className="sm:hidden fixed bottom-5 left-5 bg-black animate-glow rounded-full w-16 h-16 grid place-content-center ">
-        <IoIosAdd size="3rem" color="white" />
-      </button>
     </main>
   );
 };
