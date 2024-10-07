@@ -15,17 +15,18 @@ require("dotenv").config();
 const app = express();
 app.use(express.json());
 
-// const whitelist = ['https://magic-ws6m.onrender.com', 'http://localhost:5173', 'http://3.218.40.246', 'http://localhost:4000'];
-// const options = {
-//   origin: (origin, callback) => {
-//     if (whitelist.includes(origin) || !origin) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('no permitido'));
-//     }
-//   }
-// }
-app.use(cors());
+const whitelist = ['https://magic-ws6m.onrender.com', 'http://localhost:5173', 'http://3.218.40.246', 'http://localhost:4000'];
+const options = {
+  origin: (origin, callback) => {
+    if (whitelist.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('no permitido'));
+    }
+  }
+}
+app.use(cors(options));
+
 require('./utils/auth')
 setupModels(sequelize);
 // Sincronizar con la base de datos
