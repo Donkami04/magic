@@ -17,15 +17,14 @@ import { Loading } from "../../Components/Loading";
 import { ErrorOverlay } from "../../Components/ErrorOverlay";
 
 // Iconos
+import { IoIosAdd } from "react-icons/io";
 import { FaSearch } from "react-icons/fa";
-import { PiBroomBold } from "react-icons/pi";
 
-// Componente SelectUser para seleccionar vendedores
 const SelectUser = ({ usersList, selectedUser, onUserChange }) => (
   <select
     onChange={onUserChange}
     value={selectedUser}
-    className="w-40 md:mt-5 scrollbar text-center select:ring-cyan-500 bg-gray-800 text-white p-2 rounded-md border-2 border-blue-500 focus:ring-2 focus:ring-sky-500"
+    className="w-40 md:mt-5 scrollbar text-center select:ring-cyan-500 bg-gray-800 text-white p-2 rounded-md border-2 border-blue-500 focus:ring-2 focus:ring-blue-500"
   >
     <option value="">Vendedores</option>
     {usersList.map((user) => (
@@ -36,7 +35,6 @@ const SelectUser = ({ usersList, selectedUser, onUserChange }) => (
   </select>
 );
 
-// Botón para ejecutar la búsqueda de productos por vendedor
 const SearchButton = ({ onClick }) => (
   <button
     className="mt-4 p-2 bg-blue-magiclog text-white rounded w-20 grid place-content-center"
@@ -46,17 +44,6 @@ const SearchButton = ({ onClick }) => (
   </button>
 );
 
-// Botón para reiniciar la búsqueda y obtener todos los productos
-const ResetButton = ({ onClick }) => (
-  <button
-    className="mt-4 p-2 bg-zinc-400 text-white rounded w-20 grid place-content-center"
-    onClick={onClick}
-  >
-    <PiBroomBold />
-  </button>
-);
-
-// Componente para listar los productos
 const ProductList = ({ products }) => {
   if (products.length > 0) {
     return products.map((product) => (
@@ -78,7 +65,6 @@ const ProductList = ({ products }) => {
   );
 };
 
-// Componente principal
 export const Admin = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
@@ -90,18 +76,14 @@ export const Admin = () => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const { user, loading, setLoading } = useAuth();
-  const [isLoadingUser, setIsLoadingUser] = useState(true);
 
   useEffect(() => {
     setLoginForm(false);
     if (!user) {
       navigate("/");
-    } else {
-      setIsLoadingUser(false);
     }
-  }, []);
+  }, [user, navigate]);
 
-  // Llama a la API para obtener los productos y los vendedores
   useEffect(() => {
     setLoading(true);
     const fetchData = async () => {
@@ -134,7 +116,6 @@ export const Admin = () => {
   const handleRequest = async () => {
     if (selectedUser) {
       try {
-        setLoading(true);
         const response = await getProductsBySellerId(user.token, selectedUser);
         if (response && response.statusCode === 200) {
           const modifiedData = response.data.map((product) => ({
@@ -147,27 +128,7 @@ export const Admin = () => {
         }
       } catch (error) {
         console.error("Error al obtener productos del vendedor:", error);
-      } finally {
-        setLoading(false);
       }
-    }
-  };
-
-  // Función para resetear la búsqueda y mostrar todos los productos
-  const handleReset = async () => {
-    try {
-      setLoading(true);
-      setSelectedUser(""); // Resetear el select a "Vendedores"
-      const prodResponse = await getProducts();
-      const modifiedData = prodResponse.data.map((product) => ({
-        ...product,
-        formattedPrice: formatPrice(product.price),
-      }));
-      setFilteredProducts(modifiedData); // Mostrar todos los productos
-    } catch (error) {
-      console.error("Error al resetear los productos:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -188,12 +149,7 @@ export const Admin = () => {
             selectedUser={selectedUser}
             onUserChange={handleUserSelect}
           />
-          {selectedUser && (
-            <div className="flex w-72 justify-evenly">
-              <SearchButton onClick={handleRequest} />
-              <ResetButton onClick={handleReset} />
-            </div>
-          )}
+          {selectedUser && <SearchButton onClick={handleRequest} />}
         </aside>
         <div className="flex flex-col lg:w-128 max-sm:items-center max-sm:justify-center">
           <ProductList products={filteredProducts} />

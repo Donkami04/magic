@@ -9,9 +9,6 @@ import { useAuth } from "../../Context/Auth";
 import { ContentForm } from "../../Components/ContentForm";
 import { Loading } from "../../Components/Loading";
 
-// Iconos
-import BeatLoader from "react-spinners/BeatLoader";
-
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,13 +27,11 @@ export const Login = () => {
         // setLoading(false);
       }
     } catch (error) {
-      console.error(error);
       setError(error.response.data.message);
     }
   }, [user]);
 
   const handleSubmit = async (e) => {
-    setError(<BeatLoader color="#13AFEF" size="1rem" />);
     e.preventDefault();
     try {
       if (!email || !password) {

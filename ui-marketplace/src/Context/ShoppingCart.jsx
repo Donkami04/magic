@@ -7,7 +7,8 @@ export const ShoppingCartProvider = ({ children }) => {
   const [countItems, setCountItems] = useState(0);
   const [loginForm, setLoginForm] = useState(false);
   const [registerForm, setRegisterForm] = useState(null);
-  const [newProductForm, setNewProductForm] = useState(null);
+  const [newProductForm, setNewProductForm] = useState(true);
+  const [showCheckGif, setShowCheckGif] = useState(false);
 
   // Funciones auxiliares
   const formatPrice = (price) => {
@@ -37,6 +38,8 @@ export const ShoppingCartProvider = ({ children }) => {
     loginForm,
     setRegisterForm,
     registerForm,
+    setShowCheckGif,
+    showCheckGif,
   };
 
   return (

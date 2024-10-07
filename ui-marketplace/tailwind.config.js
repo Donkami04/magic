@@ -8,9 +8,18 @@ module.exports = {
       height: {
         // Define un custom height que puedes usar en tus componentes
         heighWithOutNav: "calc(100vh - 5rem)",
-        128: "32rem"
+        128: "32rem",
+        160: "40"
       },
       keyframes: {
+        slideDown: {
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(0)' },
+        },
+        slideUp: {
+          '0%': { transform: 'translateY(0)', opacity: 1 },
+          '100%': { transform: 'translateY(-100%)', opacity: 0 },
+        },
         glow: {
           "0%, 100%": { boxShadow: "0 0 10px 2px rgba(6, 182, 212, 0.5)" },
           "50%": { boxShadow: "0 0 20px 4px rgba(6, 182, 212, 1)" },
@@ -31,6 +40,8 @@ module.exports = {
         glow: "glow 1.5s ease-in-out infinite",
         move: "move 2s ease-in-out infinite",
         shake: "shake 0.5s ease-in-out 1",
+        slideDown: 'slideDown 0.5s ease-out forwards',
+        slideUp: 'slideUp 0.5s ease-out forwards',
       },
     },
   },

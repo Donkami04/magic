@@ -25,12 +25,12 @@ import { deleteProduct } from "../../Services/Api/Products/deleteProduct";
 // Componentes
 import { Card } from "../../Components/Card";
 import { Loading } from "../../Components/Loading";
-import { ErrorOverlay } from "../../Components/ErrorOverlay";
 import { NewProductForm } from "../../Components/NewProductForm";
 import { ConfirmationModal } from "../../Components/ConfirmationModal";
 
 // Iconos
 import { IoIosAdd } from "react-icons/io";
+import BeatLoader from "react-spinners/BeatLoader";
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -123,7 +123,7 @@ export const Dashboard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setSuccess(null);
+    setSuccess(<BeatLoader color="#13AFEF" size="1rem" />);
     try {
       const response = await axios.post(
         `${base_url}/api/v1/marketplace/products/new`,
@@ -135,6 +135,7 @@ export const Dashboard = () => {
         }
       );
       if (response && response.status !== 201) {
+        setSuccess(null);
         setError(response.message);
       } else {
         setSuccess(response.data.message);
@@ -148,6 +149,7 @@ export const Dashboard = () => {
         setFilteredProducts(modifiedData);
       }
     } catch (error) {
+      setSuccess(null);
       setError(error.response.data.message);
     }
   };
@@ -173,9 +175,9 @@ export const Dashboard = () => {
           setNewProduct={setNewProduct}
         />
       )}
-      <main className="h-heighWithOutNav absolute top-20 overflow-auto grid w-full pl-[10%] pr-[10%] bg-radial-custom max-sm:p-0">
-        <div className="mt-5 flex max-sm:flex-col">
-          <aside className="h-96 flex flex-col justify-evenly items-center text-white w-72 bg-transparent max-sm:hidden mt-5">
+      <main className=" h-heighWithOutNav absolute top-20 overflow-auto grid w-full pl-[10%] pr-[10%] bg-radial-custom max-sm:p-0">
+        <div className="mt-5 flex justify-center md:w-full">
+          <aside className="h-10 flex flex-col  items-center text-white w-72 bg-transparent max-md:hidden mt-5">
             <button
               onClick={() => setNewProdForm(true)}
               className="bg-black animate-glow w-52 h-10 grid place-content-center rounded-2xl"
@@ -183,11 +185,11 @@ export const Dashboard = () => {
               Crear producto
             </button>
           </aside>
-          <div className="flex flex-col lg:w-128 max-sm:items-center max-sm:justify-center">
+          <div className="flex flex-col lg:w-96 md:justify-start max-md:w-80 h-full items-center">
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product) => (
                 <div
-                  className="lg:ml-15 max-sm:w-[100%]"
+                  className="lg:ml-15 max-md:w-60 place-content-center max-sm:w-full"
                   key={product.product_id}
                 >
                   <Card
@@ -208,7 +210,7 @@ export const Dashboard = () => {
         </div>
         <button
           onClick={() => setNewProdForm(true)}
-          className="sm:hidden fixed bottom-5 left-5 bg-black animate-glow rounded-full w-16 h-16 grid place-content-center"
+          className="md:hidden fixed bottom-5 left-5 bg-black animate-glow rounded-full w-16 h-16 grid place-content-center"
         >
           <IoIosAdd size="3rem" color="white" />
         </button>

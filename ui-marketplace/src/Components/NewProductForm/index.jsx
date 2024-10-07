@@ -1,4 +1,5 @@
 import { IoMdCloseCircle } from "react-icons/io";
+import BeatLoader from "react-spinners/BeatLoader";
 
 export const NewProductForm = ({
   onSubmit,
@@ -14,7 +15,7 @@ export const NewProductForm = ({
 
   return (
     <div className="absolute w-full flex bg-black/70 h-heighWithOutNav items-center justify-center top-20 z-50">
-      <form className="border-2 border-neutral-950 flex flex-col justify-around items-center md:w-96 max-sm:w-72 bg-black h-128 rounded-3xl">
+      <form className="border-2 border-neutral-950 flex flex-col justify-around items-center max-sm:w-64 w-96  bg-black h-128 rounded-3xl">
         <h2 className="text-white text-lg blue-magiclog font-bold text-center">
           Registrar producto
           <span
@@ -24,9 +25,13 @@ export const NewProductForm = ({
             <IoMdCloseCircle size="1.5rem" />
           </span>
         </h2>
-        {error && <p className="text-red-600 text-center px-3">{error}</p>}
+        {error && (
+          <p className="text-red-600 min-h-15 text-center px-3 min-h-3 ">
+            {error}
+          </p>
+        )}
         {success && (
-          <p className="text-green-600 text-center px-3">{success}</p>
+          <p className="min-h-12  text-green-600 text-center px-3">{success}</p>
         )}
         {["name", "sku", "quantity", "price"].map((field) => (
           <div key={field} className="mb-4 md:w-72">

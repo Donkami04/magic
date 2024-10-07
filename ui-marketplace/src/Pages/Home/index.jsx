@@ -12,6 +12,7 @@ import { Card } from "../../Components/Card";
 import { Loading } from "../../Components/Loading";
 import { ErrorOverlay } from "../../Components/ErrorOverlay";
 import { FilterInput } from "../../Components/FilterInput";
+import { CheckGif } from "../../Components/CheckGif";
 
 // Iconos
 import { BsFillSearchHeartFill } from "react-icons/bs";
@@ -24,14 +25,14 @@ export const Home = () => {
   const [error, setError] = useState(null);
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [showFiltersMobile, setShowFiltersMobile] = useState(false);
+  const { formatPrice, showCheckGif } = useShoppingContext();
+  const filtersRef = useRef(null);
   const [searchParams, setSearchParams] = useState({
     name: "",
     sku: "",
     price: "",
   });
-  const [showFiltersMobile, setShowFiltersMobile] = useState(false);
-  const { formatPrice } = useShoppingContext();
-  const filtersRef = useRef(null);
 
   // Fetch products on mount
   useEffect(() => {
@@ -148,7 +149,7 @@ export const Home = () => {
 
   return (
     <main className="h-heighWithOutNav absolute top-20 w-full flex justify-center overflow-auto pl-[10%] pr-[10%] bg-radial-custom max-sm:p-0">
-      <div className="mt-5 flex max-md:flex-col w-92">
+      <div className="mt-5  max-md:mt-0 max-sm: flex max-md:flex-col w-92 rounded-3xl">
         {/* Filters for larger screens */}
         <aside className="text-white w-72 bg-transparent max-md:hidden mt-5">
           <form className="flex flex-col items-center" onSubmit={handleSubmit}>
@@ -171,11 +172,11 @@ export const Home = () => {
         </aside>
 
         {/* Mobile filters */}
-        <div className="md:hidden flex flex-col items-center bg-red-600">
+        <div className="md:hidden flex flex-col items-center">
           {showFiltersMobile && (
             <div
               ref={filtersRef}
-              className="h-96 pt-3 z-10 absolute top-0 bg-black bg-opacity-90 w-full flex flex-col items-center border-b border-sky-500"
+              className="h-96 z-10 absolute top-0 bg-black bg-opacity-90 w-full flex flex-col items-center border-b border-sky-500 animate-slideDown"
             >
               <button
                 onClick={closeFiltersMobile}
@@ -202,7 +203,7 @@ export const Home = () => {
               </form>
             </div>
           )}
-          <div className="flex text-white w-full justify-center h-5 bg-black border-b border-white pb-5">
+          <div className="flex text-white w-full justify-center h-10 bg-black rounded-3xl border-b border-white max-md:pb-0 pb-5">
             <div
               className="cursor-pointer flex justify-evenly items-center h-full w-56"
               onClick={toggleMenuMobile}
@@ -217,10 +218,7 @@ export const Home = () => {
         <div className="flex flex-col w-128 max-sm:w-96 max-sm:items-center max-sm:justify-center">
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
-              <div
-                className="lg:ml-15 max-sm:w-[100%]"
-                key={product.product_id}
-              >
+              <div className="lg:ml-15 max-sm:w-[90%]" key={product.product_id}>
                 <Card product={product} />
                 <div className="border-b border-zinc-800"></div>
               </div>
@@ -232,6 +230,7 @@ export const Home = () => {
           )}
         </div>
       </div>
+      {showCheckGif && <CheckGif />}
     </main>
   );
 };

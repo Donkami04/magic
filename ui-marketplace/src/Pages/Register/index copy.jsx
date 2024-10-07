@@ -36,8 +36,7 @@ export const Register = () => {
   const [colorEmailInput, setColorEmailInput] = useState("border-gray-300");
   const [shake, setShake] = useState(false);
   const [checkGif, setCheckGif] = useState(null);
-  const { registerForm, setRegisterForm, setShowCheckGif } =
-    useShoppingContext();
+  const { registerForm, setRegisterForm } = useShoppingContext();
 
   const validatePassword = (password) => {
     setError(<BeatLoader color="#13AFEF" size="1rem" />);
@@ -86,13 +85,11 @@ export const Register = () => {
       );
 
       const statusCode = response?.status || 500;
+
       if (statusCode === 201) {
+        setCheckGif(true);
         setRegisterForm(false);
-        setShowCheckGif(true);
-        setTimeout(() => {
-          setShowCheckGif(false);
-        }, 1300);
-        // setSuccess(response.data.message);
+        setSuccess(response.data.message);
         setEmail("");
         setPassword("");
         setConfirmPassword("");

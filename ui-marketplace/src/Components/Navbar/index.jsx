@@ -17,6 +17,7 @@ import { IoMdHome } from "react-icons/io";
 import { HiMiniShoppingBag } from "react-icons/hi2";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { IoLogIn } from "react-icons/io5";
+import { BsPencilFill } from "react-icons/bs";
 
 export const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -79,7 +80,7 @@ export const Navbar = () => {
         </h1>
 
         <div
-          className={`flex justify-between items-center sm:w-80 md:justify-evenly`}
+          className={`flex justify-between items-center md:w-80 max-md:justify-evenly md:justify-evenly`}
         >
           {!showSellerOptions && (
             <NavLink
@@ -210,7 +211,7 @@ export const Navbar = () => {
                   to=""
                   className="flex justify-evenly relative blue-magiclog"
                 >
-                  <IoLogIn color="bg-blue-magiclog" size="1.8rem" />
+                  <BsPencilFill color="bg-blue-magiclog" size="1.5rem" />
                   <span className="grid place-items-center w-[40%]">
                     Registrarse
                   </span>
