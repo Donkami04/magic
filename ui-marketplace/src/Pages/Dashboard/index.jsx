@@ -1,22 +1,17 @@
+// Dependencias
+import axios from "axios";
+
 // React Importaciones
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Definicion de constantes
-const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT || "local";
+const VITE_API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3000";
 
-let base_url = "";
-if (ENVIRONMENT === "production") {
-  base_url = "https://magic-log.onrender.com";
-} else {
-  base_url = "http://localhost:3000";
-}
+const BASE_API_URL = `${VITE_API_BASE}/api/v1/marketplace`;
 // Contexts
 import { useShoppingContext } from "../../Context/ShoppingCart";
 import { useAuth } from "../../Context/Auth";
-
-// Dependencias
-import axios from "axios";
 
 // Llamados a la API
 import { getProductsBySeller } from "../../Services/Api/Products/sellerProducts";
@@ -126,7 +121,7 @@ export const Dashboard = () => {
     setSuccess(<BeatLoader color="#13AFEF" size="1rem" />);
     try {
       const response = await axios.post(
-        `${base_url}/api/v1/marketplace/products/new`,
+        `${BASE_API_URL}/api/v1/marketplace/products/new`,
         newProduct,
         {
           headers: {

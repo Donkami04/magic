@@ -1,14 +1,7 @@
 import axios from "axios";
-const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT || "local";
+const VITE_API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3000";
+const BASE_API_URL = `${VITE_API_BASE}/api/v1/marketplace`;
 
-let base_url = ""
-if (ENVIRONMENT === "production") {
-  base_url = "https://magic-log.onrender.com"
-} else {
-  base_url = "http://localhost:3000"
-}
-
-export const BASE_API_URL = `${base_url}/api/v1/marketplace`;
 
 export const getProductsBySeller = async (token) => {
   return axios

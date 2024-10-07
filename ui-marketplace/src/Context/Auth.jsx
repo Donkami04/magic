@@ -3,15 +3,8 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
 
 // Definición de constantes
-const ENVIRONMENT = import.meta.env.VITE_ENVIRONMENT || "local";
-
-let base_url = "";
-if (ENVIRONMENT === "production") {
-  base_url = "https://magic-log.onrender.com";
-} else {
-  base_url = "http://localhost:3000";
-}
-const API_BASE_URL = `${base_url}/api/v1/marketplace`;
+const VITE_API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3000";
+const API_BASE_URL = `${VITE_API_BASE}/api/v1/marketplace`;
 const TOKEN_KEY = "jwtToken";
 
 export const AuthContext = createContext();
