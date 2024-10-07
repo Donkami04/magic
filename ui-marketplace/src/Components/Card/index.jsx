@@ -1,12 +1,11 @@
 // React Importaciones
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 // Contexts
 import { useShoppingContext } from "../../Context/ShoppingCart";
 
 // Iconos
-import { MdEdit } from "react-icons/md";
 import { FaTrash } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 

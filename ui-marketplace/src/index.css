@@ -24,28 +24,27 @@
   }
 
   .scrollbar {
-    scrollbar-width: thin; /* Estilo para Firefox */
-    scrollbar-color: #13AFEF #1f2937; /* Color de la barra y de la pista */
+    scrollbar-width: thin; 
+    scrollbar-color: #13AFEF #1f2937;
   }
   
-  /* Estilos para navegadores WebKit (Chrome, Safari) */
+  
   .scrollbar::-webkit-scrollbar {
-    width: 2px; /* Ancho de la barra de desplazamiento */
+    width: 2px;
   }
   
   .scrollbar::-webkit-scrollbar-track {
-    background: #1f2937; /* Color del fondo de la pista */
-    border-radius: 10px; /* Bordes redondeados */
+    background: #1f2937;    border-radius: 10px; 
   }
   
   .scrollbar::-webkit-scrollbar-thumb {
-    background-color: #13B2EE; /* Color de la parte que se arrastra */
-    border-radius: 10px; /* Bordes redondeados */
-  }
+    background-color: #13B2EE;
+    border-radius: 10px;  
+   }
   
-  /* Cambiar el color al hacer hover */
+ 
   .scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: #13B2EE; /* Color al hacer hover */
+    background-color: #13B2EE; 
   }
   
 

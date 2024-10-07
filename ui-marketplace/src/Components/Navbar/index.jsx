@@ -1,6 +1,6 @@
 // React Importaciones
 import { NavLink } from "react-router-dom";
-import { useState, useRef, useEffect, useContext } from "react";
+import { useState, useRef, useEffect } from "react";
 
 // Contexts
 import { useShoppingContext } from "../../Context/ShoppingCart";
@@ -16,7 +16,6 @@ import { IoLogOut } from "react-icons/io5";
 import { IoMdHome } from "react-icons/io";
 import { HiMiniShoppingBag } from "react-icons/hi2";
 import { HiMenuAlt3 } from "react-icons/hi";
-import { IoLogIn } from "react-icons/io5";
 import { BsPencilFill } from "react-icons/bs";
 
 export const Navbar = () => {

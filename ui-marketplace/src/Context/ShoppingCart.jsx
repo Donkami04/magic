@@ -7,7 +7,6 @@ export const ShoppingCartProvider = ({ children }) => {
   const [countItems, setCountItems] = useState(0);
   const [loginForm, setLoginForm] = useState(false);
   const [registerForm, setRegisterForm] = useState(null);
-  const [newProductForm, setNewProductForm] = useState(true);
   const [showCheckGif, setShowCheckGif] = useState(false);
 
   // Funciones auxiliares

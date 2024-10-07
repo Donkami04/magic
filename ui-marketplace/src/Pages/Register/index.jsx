@@ -72,14 +72,12 @@ export const Register = () => {
     }
 
     try {
-      const response = await axios.post(
-        `${BASE_API_URL}/api/v1/marketplace/users/new`,
-        {
-          name,
-          email,
-          password,
-        }
-      );
+      const response = await axios.post(`${BASE_API_URL}/users/new`, {
+        name,
+        email,
+        password,
+      });
+      console.log(response);
 
       const statusCode = response?.status || 500;
       if (statusCode === 201) {

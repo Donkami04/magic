@@ -2,12 +2,9 @@ import React, { useEffect } from "react";
 
 export const CheckGif = () => {
   useEffect(() => {
-    // Guarda el estilo original
     const originalStyle = window.getComputedStyle(document.body).overflow;
-    // Bloquea el scroll
     document.body.style.overflow = "hidden";
 
-    // Limpia el efecto cuando el componente se desmonta
     return () => {
       document.body.style.overflow = originalStyle;
     };

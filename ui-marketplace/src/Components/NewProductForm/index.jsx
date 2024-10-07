@@ -1,5 +1,4 @@
 import { IoMdCloseCircle } from "react-icons/io";
-import BeatLoader from "react-spinners/BeatLoader";
 
 export const NewProductForm = ({
   onSubmit,

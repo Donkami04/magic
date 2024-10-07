@@ -121,7 +121,7 @@ export const Dashboard = () => {
     setSuccess(<BeatLoader color="#13AFEF" size="1rem" />);
     try {
       const response = await axios.post(
-        `${BASE_API_URL}/api/v1/marketplace/products/new`,
+        `${BASE_API_URL}/products/new`,
         newProduct,
         {
           headers: {
