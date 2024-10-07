@@ -43,7 +43,7 @@ AeeGBFm3nLQqs7uyjv7eHXxLRNOnqWOknTp4wxwRp49YUN3eGg==
 // Probar la conexión
 sequelize.authenticate()
     .then(() => {
-        console.log('Conexión exitosa con la base de datos.');
+        console.log('Conexión a la base de datos de PRODUCCION exitosa.');
     })
     .catch(err => {
         console.error('Error al conectar con la base de datos:', err);
