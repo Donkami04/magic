@@ -1,5 +1,4 @@
 const express = require("express");
-const app = express();
 const cors = require("cors");
 const PORT = process.env.NODE_PORT || 3000;
 const sequelize = require("./libs/sequelize");
@@ -12,15 +11,22 @@ const {
 } = require("./middlewares/error.handler");
 const setupModels = require("./db/models");
 require("dotenv").config();
-require('./utils/auth')
+
+const app = express();
 app.use(express.json());
 
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
-
+const whitelist = ['https://magic-ws6m.onrender.com', 'http://localhost:5173', 'http://3.218.40.246', 'http://localhost:4000'];
+const options = {
+  origin: (origin, callback) => {
+    if (whitelist.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('no permitido'));
+    }
+  }
+}
+app.use(cors(options));
+require('./utils/auth')
 setupModels(sequelize);
 // Sincronizar con la base de datos
 sequelize
